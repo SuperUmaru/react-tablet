@@ -82,6 +82,8 @@ Acceptance: the synthetic visit can move from ready-for-checkout to completed, i
 
 ## M5 — Quality and Release Readiness
 
+- [x] M5.0 Add privacy-safe centralized frontend telemetry, trace IDs, error recovery, and restrained multilingual toasts (TASK-015).
+
 - [x] M5.1 Unit tests for current domain rules and adapter paths.
 - [x] M5.2 Component/integration tests for current critical UI states.
 - [x] M5.3 Current coverage exceeds 80%: 98.87% statements/lines, 94.85% branches, and 83.56% functions.

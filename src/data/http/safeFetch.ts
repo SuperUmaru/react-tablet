@@ -1,5 +1,7 @@
 import { z } from 'zod';
 import { ConcurrentEditError } from '../../domain/concurrency';
+import { HttpRequestError } from '../../observability/HttpRequestError';
+import { telemetry } from '../../observability/telemetry';
 
 const DEFAULT_TIMEOUT_MS = 15_000;
 
@@ -31,7 +33,11 @@ export async function safeJsonRequest<T>(
       const latest = response.headers.get('content-type')?.includes('application/json') ? await response.json() : null;
       throw new ConcurrentEditError(response.status, latest);
     }
-    if (!response.ok) throw new Error(`Request failed (${response.status})`);
+    if (response.status === 403 || response.status >= 500) {
+      const traceId = telemetry.capture('http_failure', undefined, response.status);
+      throw new HttpRequestError(response.status, traceId);
+    }
+    if (!response.ok) throw new HttpRequestError(response.status);
     const contentType = response.headers.get('content-type') ?? '';
     if (!contentType.includes('application/json')) throw new Error('Unexpected response type');
     return schema.parse(await response.json());

@@ -1,22 +1,27 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { Check, Save } from 'lucide-react';
+import { Save } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { AppShell } from '../components/AppShell';
 import { PageHeader } from '../components/PageHeader';
 import { SelectField } from '../components/ui/SelectField';
 import { practiceRepository } from '../data/mock/mockPracticeRepository';
 import type { ClinicSettings } from '../domain/practice';
+import { useToast } from '../components/toastContext';
+import { telemetry } from '../observability/telemetry';
 
 const option = (value: string) => ({ value, label: value });
 
 export function SettingsPage() {
+  const { t } = useTranslation();
+  const { notify } = useToast();
   const query = useQuery({ queryKey:['settings'], queryFn:() => practiceRepository.getSettings() });
   const [form, setForm] = useState<ClinicSettings | null>(null);
   useEffect(() => { if (query.data) setForm(query.data); }, [query.data]);
-  const mutation = useMutation({ mutationFn:(settings:ClinicSettings) => practiceRepository.saveSettings(settings) });
+  const mutation = useMutation({ mutationFn:(settings:ClinicSettings) => practiceRepository.saveSettings(settings), onSuccess:() => { telemetry.record('settings.save.succeeded'); notify({ id:'settings-saved', tone:'success', message:t('toast.settingsSaved') }); }, onError:() => notify({ id:'settings-error', tone:'error', message:t('toast.actionFailed') }) });
   if (!form) return <AppShell><div className="loading" role="status">Loading settings…</div></AppShell>;
   const update = <K extends keyof ClinicSettings>(key:K, value:ClinicSettings[K]) => setForm({ ...form, [key]:value });
-  const submit = (event:FormEvent) => { event.preventDefault(); mutation.mutate(form); };
+  const submit = (event:FormEvent) => { event.preventDefault(); telemetry.record('settings.save.started'); mutation.mutate(form); };
 
   return <AppShell><PageHeader eyebrow="CLINIC CONFIGURATION" title="Settings" description="Control the patient experience and daily clinic defaults." />
     <form className="settings-form" onSubmit={submit}>
@@ -36,7 +41,7 @@ export function SettingsPage() {
           {([['requireConsent','Require consent before check-in'],['allowTips','Allow gratuity at checkout'],['appointmentReminders','Send appointment reminders']] as const).map(([key,label]) => <label key={key}><span><strong>{label}</strong><small>Applies at this location</small></span><input type="checkbox" checked={form[key]} onChange={(event) => update(key,event.target.checked)} /></label>)}
         </div>
       </section>
-      <div className="settings-actions">{mutation.isSuccess && <span className="save-success"><Check />Settings saved</span>}<button className="button button--primary" disabled={mutation.isPending}><Save />{mutation.isPending ? 'Saving…' : 'Save settings'}</button></div>
+      <div className="settings-actions"><button className="button button--primary" disabled={mutation.isPending}><Save />{mutation.isPending ? 'Saving…' : 'Save settings'}</button></div>
     </form>
   </AppShell>;
 }

@@ -4,6 +4,8 @@ Tablet-first patient check-in and responsive staff operations UI built with Reac
 
 Technology baseline: React 19, strict TypeScript, Vite, TanStack Router for typed file-based routing, TanStack Query for server state, Radix Primitives for complex accessible controls, semantic CSS design tokens, Vitest, and Playwright. See the [React architecture baseline](docs/react-architecture.md).
 
+Production error collection, privacy boundaries, provider setup, and notification policy are documented in [Frontend observability](docs/observability.md).
+
 ## Run locally
 
 ```bash

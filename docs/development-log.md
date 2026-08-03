@@ -86,6 +86,12 @@ This is an append-only record of material implementation decisions, completed wo
 
 ## Log Entry Template
 
+## 2026-08-03 — TASK-015 started
+
+- Recorded the observability/toast task before implementation.
+- Defined critical versus recoverable event policy, correlation IDs, sanitized bounded breadcrumbs, and same-origin telemetry ingestion.
+- Defined accessible deduplicated toast rules and English/Spanish completion/error messages.
+
 ## 2026-08-03 — TASK-014 started
 
 - Recorded the portrait UI correction before implementation.
@@ -138,3 +144,11 @@ This is an append-only record of material implementation decisions, completed wo
 - Verification:
 - Known issues/blockers:
 - Next task IDs:
+
+## 2026-08-03 — TASK-015 centralized observability and notifications
+
+- Added a provider-neutral critical telemetry envelope and same-origin ASP.NET ingestion contract for Azure Application Insights or AWS CloudWatch forwarding.
+- Captured React crashes, global errors, unhandled rejections, HTTP 403, and 5xx with random trace/session IDs and a 20-item allowlisted breadcrumb buffer.
+- Excluded patient/user identifiers, field/DOM text, query strings, headers, tokens, bodies, clinical details, and payment details.
+- Added English/Spanish accessible, deduplicated, bounded, dismissible, motion-safe notifications for save and payment completion.
+- Verification: typecheck, lint, build, 46/46 Vitest tests, 94.31% statement/line coverage, and 82/82 Playwright tests passed.

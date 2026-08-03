@@ -39,7 +39,9 @@ export const resources = {
         scheduled: 'Scheduled', arrived: 'Arrived', 'forms-incomplete': 'Forms needed',
         ready: 'Ready', 'in-treatment': 'In treatment', checkout: 'Checkout', completed: 'Completed'
       },
-      common: { language: 'Language', time: 'Time', patient: 'Patient', service: 'Service', provider: 'Provider', status: 'Status' }
+      common: { language: 'Language', time: 'Time', patient: 'Patient', service: 'Service', provider: 'Provider', status: 'Status' },
+      toast: { close: 'Dismiss notification', settingsSaved: 'Settings saved', paymentComplete: 'Payment completed. Receipt is ready.', actionFailed: 'We couldn’t complete that action. Try again.' },
+      errors: { crashTitle: 'This screen stopped working', crashDetail: 'Reload the page to continue. Support can use the reference below.', reload: 'Reload page', reference: 'Reference' }
     }
   },
   es: {
@@ -49,7 +51,9 @@ export const resources = {
       dashboard: { greeting: 'Buenos días, Olivia', subtitle: 'Esto es lo que ocurre hoy en la Clínica Riverside.', startCheckIn: 'Iniciar registro del paciente', today: 'Agenda de hoy', viewSchedule: 'Ver agenda completa', appointments: 'Citas', checkedIn: 'Registrados', needsAttention: 'Requieren atención', readyCheckout: 'Listos para pagar' },
       kiosk: { eyebrow: 'REGISTRO PRIVADO Y SEGURO', title: 'Bienvenido a Aurelia', subtitle: 'Vamos a registrarte. Solo tomará unos minutos.', phone: 'Últimos 4 dígitos de tu teléfono', dob: 'Fecha de nacimiento', continue: 'Buscar mi cita', staffHelp: '¿Necesitas ayuda? Pregunta en recepción.', notFound: 'No encontramos una cita que coincida. Revisa tus datos o pregunta en recepción.', found: 'Encontramos tu cita', confirm: 'Sí, registrarme', back: 'No soy yo', success: '¡Registro completado!', successDetail: 'Toma asiento. Tu proveedor estará contigo en breve.', finish: 'Finalizar' },
       status: { scheduled: 'Programada', arrived: 'Registrado', 'forms-incomplete': 'Faltan formularios', ready: 'Listo', 'in-treatment': 'En tratamiento', checkout: 'Pago', completed: 'Completada' },
-      common: { language: 'Idioma', time: 'Hora', patient: 'Paciente', service: 'Servicio', provider: 'Proveedor', status: 'Estado' }
+      common: { language: 'Idioma', time: 'Hora', patient: 'Paciente', service: 'Servicio', provider: 'Proveedor', status: 'Estado' },
+      toast: { close: 'Cerrar notificación', settingsSaved: 'Configuración guardada.', paymentComplete: 'Pago completado. El recibo está listo.', actionFailed: 'No pudimos completar la acción. Inténtalo de nuevo.' },
+      errors: { crashTitle: 'Esta pantalla dejó de funcionar', crashDetail: 'Recarga la página para continuar. Soporte puede usar la referencia siguiente.', reload: 'Recargar página', reference: 'Referencia' }
     }
   }
 } as const;
