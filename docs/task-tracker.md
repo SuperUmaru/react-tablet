@@ -83,6 +83,8 @@ Acceptance: the synthetic visit can move from ready-for-checkout to completed, i
 - [ ] M5.5 Tablet portrait/landscape and desktop visual verification.
 - [ ] M5.6 Privacy review for fixtures, logs, URLs, caches, and session cleanup.
 - [~] M5.7 Production build passes; release runbook remains open.
+- [x] M5.8 Playwright tablet/desktop journeys, axe scans, low-power budget, and failure artifact reporting (TASK-006).
+- [~] M5.9 Certify modern and older tablet tiers, legacy bundle, low-power budgets, and physical device matrix.
 
 Acceptance: automated gates pass, a manual WCAG 2.1 AAA conformance report has no open failures, and the tablet workflow has no known P0/P1 defects.
 

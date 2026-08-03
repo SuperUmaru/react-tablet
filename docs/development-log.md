@@ -30,6 +30,16 @@ This is an append-only record of material implementation decisions, completed wo
 - Connected `origin` to `https://github.com/SuperUmaru/react-tablet.git` and pushed `main` successfully.
 - Local commit identity is `Codex <codex@local>` because no repository author identity was configured; future commits should use the project owner’s verified GitHub email if contribution attribution is required.
 
+## 2026-08-03 — Tablet automation and compatibility review
+
+- Reviewed the complete walking skeleton and recorded prioritized findings in `docs/code-review-2026-08-03.md`.
+- Added Playwright projects for 1024×768 touch landscape, 768×1024 touch portrait, 1440×900 desktop, and a throttled low-power tablet.
+- Added critical patient/staff journeys, overflow assertions, axe scans, screenshots, JSON/HTML reports, traces, and failure video.
+- The initial axe run found invalid table roles and insufficient contrast. Fixed both; all 12 landscape/portrait tests then passed.
+- Added Vite’s official legacy build targeting iOS 12+ and Chrome/WebView 70+, removed unsupported `structuredClone`, and added CSS compatibility fallbacks.
+- The initial low-power measurement exposed an invalid dev-server performance method and a runtime font dependency. Removed Google Fonts and changed Playwright to measure production bundles. The unchanged throttled performance gate then passed.
+- Removed an accidental `git` npm production dependency; dependency audit remains clean.
+
 ## Log Entry Template
 
 ### YYYY-MM-DD — Short title

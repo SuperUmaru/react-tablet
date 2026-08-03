@@ -50,12 +50,12 @@ export function DashboardPage() {
           <div className="section-heading"><div><h2>{t('dashboard.today')}</h2><p>4 appointments · 9:00 AM – 2:15 PM</p></div><button className="text-button">{t('dashboard.viewSchedule')}<ArrowRight /></button></div>
           {appointments.isLoading ? <div className="loading" role="status" aria-live="polite">Loading appointments…</div> : (
             <div className="schedule-table" role="table" aria-label={t('dashboard.today')}>
-              <div className="schedule-row schedule-row--head" role="row"><span>{t('common.time')}</span><span>{t('common.patient')}</span><span>{t('common.service')}</span><span>{t('common.provider')}</span><span>{t('common.status')}</span><span /></div>
+              <div className="schedule-row schedule-row--head" role="row"><span role="columnheader">{t('common.time')}</span><span role="columnheader">{t('common.patient')}</span><span role="columnheader">{t('common.service')}</span><span role="columnheader">{t('common.provider')}</span><span role="columnheader">{t('common.status')}</span><span role="columnheader" aria-label="Actions" /></div>
               {items.map((appointment) => (
                 <div className="schedule-row" role="row" key={appointment.id}>
-                  <time>{new Intl.DateTimeFormat(i18n.language, { hour: 'numeric', minute: '2-digit' }).format(new Date(appointment.startsAt))}<small>{appointment.durationMinutes} min</small></time>
-                  <span className="patient-cell"><span className="patient-avatar">{initials(appointment)}</span><strong>{displayName(appointment)}</strong></span>
-                  <span>{appointment.service}</span><span>{appointment.provider}</span><StatusBadge status={appointment.status} /><button className="row-button" aria-label={`Open ${displayName(appointment)}`}><ChevronRight /></button>
+                  <time role="cell">{new Intl.DateTimeFormat(i18n.language, { hour: 'numeric', minute: '2-digit' }).format(new Date(appointment.startsAt))}<small>{appointment.durationMinutes} min</small></time>
+                  <span className="patient-cell" role="cell"><span className="patient-avatar">{initials(appointment)}</span><strong>{displayName(appointment)}</strong></span>
+                  <span role="cell">{appointment.service}</span><span role="cell">{appointment.provider}</span><span role="cell"><StatusBadge status={appointment.status} /></span><span role="cell"><button className="row-button" aria-label={`Open ${displayName(appointment)}`}><ChevronRight /></button></span>
                 </div>
               ))}
             </div>

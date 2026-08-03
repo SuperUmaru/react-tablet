@@ -2,15 +2,16 @@ import type { Appointment, AppointmentRepository } from '../../domain/appointmen
 import fixture from './appointments.json';
 
 const wait = (milliseconds: number) => new Promise((resolve) => setTimeout(resolve, milliseconds));
+const clone = <T,>(value: T): T => JSON.parse(JSON.stringify(value)) as T;
 
 export class MockAppointmentRepository implements AppointmentRepository {
-  private appointments: Appointment[] = structuredClone(fixture) as Appointment[];
+  private appointments: Appointment[] = clone(fixture) as Appointment[];
 
   constructor(private readonly latency = 160) {}
 
   async listToday(): Promise<Appointment[]> {
     await wait(this.latency);
-    return structuredClone(this.appointments);
+    return clone(this.appointments);
   }
 
   async findForCheckIn(phoneLastFour: string, dateOfBirth: string): Promise<Appointment | null> {
@@ -19,7 +20,7 @@ export class MockAppointmentRepository implements AppointmentRepository {
       (appointment) =>
         appointment.phoneLastFour === phoneLastFour && appointment.dateOfBirth === dateOfBirth,
     );
-    return result ? structuredClone(result) : null;
+    return result ? clone(result) : null;
   }
 
   async markArrived(id: string): Promise<Appointment> {
@@ -27,9 +28,8 @@ export class MockAppointmentRepository implements AppointmentRepository {
     const appointment = this.appointments.find((item) => item.id === id);
     if (!appointment) throw new Error('Appointment not found');
     appointment.status = 'arrived';
-    return structuredClone(appointment);
+    return clone(appointment);
   }
 }
 
 export const appointmentRepository = new MockAppointmentRepository();
-
