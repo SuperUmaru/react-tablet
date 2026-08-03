@@ -18,7 +18,8 @@ Each completed implementation task has a durable record containing purpose, tech
 | [TASK-012](TASK-012-tanstack-router.md) | Typed TanStack Router foundation | Complete |
 | [TASK-013](TASK-013-infinite-scroll-concurrency.md) | Stable infinite scroll and cross-device concurrency | Complete |
 | [TASK-014](TASK-014-patient-portrait-controls.md) | Patient portrait search and filter alignment | Complete |
-| [TASK-015](TASK-015-observability-toasts.md) | Centralized observability and multilingual toasts | In progress |
+| [TASK-015](TASK-015-observability-toasts.md) | Centralized observability and multilingual toasts | Complete |
+| [TASK-016](TASK-016-comprehensive-readme.md) | Concise README and deep code review | Complete |
 
 ## Task/commit workflow
 

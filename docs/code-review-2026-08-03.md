@@ -1,71 +1,71 @@
-# Code Review — 2026-08-03
+# Deep code review — 2026-08-03
 
-## Summary
+Scope: all application source, tests, build configuration, CI, security/concurrency/observability boundaries, tablet performance, accessibility, and documentation. This review records findings only; application fixes require follow-up tasks.
 
-The repository is a sound walking skeleton: strict TypeScript, clear mock repository boundary, responsive tablet/desktop layouts, localization infrastructure, high unit/integration coverage, and clean production dependencies. It is not yet production-ready clinical software. The highest-value next work is resilience/privacy in kiosk sessions, complete localization, deterministic mock isolation, and browser-level tablet validation.
+## Executive assessment
+
+The foundation is modern and appropriate: strict TypeScript, route-level code splitting, TanStack Query/Router, repository boundaries, Zod validation, bounded patient rendering, device-focused Playwright coverage, and explicit frontend/backend security ownership. The current application is a strong synthetic-data prototype, not yet a production clinical release.
+
+The highest-risk gaps are telemetry identifier redaction, lost crash stack context, incomplete async failure recovery, incomplete localization, and concurrency helpers that are documented but not connected to real mutations.
 
 ## Findings
 
-### High priority
+### P0 — Privacy boundary
 
-1. **Kiosk session lifecycle is incomplete.** Manual reset exists, but inactivity timeout, warning/extension, route-exit cleanup, reload behavior, and staff recovery are not implemented. Patient context could remain visible when a user walks away.
-   - Recommendation: create an explicit check-in state machine and privacy session controller; warn before timeout, allow extension per WCAG timing requirements, and clear all sensitive query/form state on timeout, completion, route exit, and logout.
+1. **Generated patient IDs can enter telemetry routes.** `routeTemplate` recognizes numeric, UUID, and `pat-*` segments, but the 10k dataset generates `patient-*`. A crash on `/patients/patient-00025` can therefore send that identifier. Replace pattern-based redaction with route-aware templates or redact every dynamic segment through the router match before enabling production ingestion.
 
-2. **Network exceptions are not handled in the UI.** `lookup` and `confirm` use `await` without `try/finally`; a rejected repository promise can leave the UI busy and produce an unhandled error.
-   - Recommendation: centralize mutation state through TanStack Query or a typed async state helper; show localized retry messaging and always reset busy state in `finally`.
+### P1 — Release blockers
 
-3. **WCAG 2.1 AAA is a target, not yet demonstrated conformance.** Semantic foundations are useful, but no automated browser scan or manual conformance report previously existed. AAA also includes criteria automation cannot verify.
-   - Implemented in this task: Playwright + axe A/AA detection and artifact collection.
-   - Recommendation: complete the manual AAA matrix described in `TASK-005`, including readability, timing, cognitive support, pronunciation, media, keyboard, screen reader, voice control, zoom/reflow, and contrast measurements.
+2. **The React error boundary discards the original error stack.** It constructs a new error from the error name and component stack; the sanitizer then removes that message line. Telemetry points at the boundary instead of the failing source. Preserve a sanitized original stack and carry a separately sanitized component stack.
 
-### Medium priority
+3. **Check-in async errors have no `try/finally`.** A rejected lookup or check-in request can leave the kiosk busy and produce an unhandled rejection instead of a recoverable translated message. Mutation/error states should preserve input and always clear busy state.
 
-4. **Many user-visible strings bypass i18n.** Examples include skip links, location, settings/search labels, dates, loading text, appointment confirmation labels, busy text, demo hint, privacy footer, and patient-specific confirmation sentence.
-   - Recommendation: move every string to feature namespaces and add a test/ESLint rule that rejects raw JSX text outside approved components.
+4. **Localization is partial.** Navigation and much of check-in are translated, but staff headings, forms, statuses, patient fields, checkout, settings, loading states, and several kiosk strings remain hardcoded English. Do not describe the full product as multilingual until all user-facing strings are resource keys and locale formatting covers dates/currency.
 
-5. **The singleton mock repository is mutable across tests and browser sessions.** `markArrived` changes module state. This can make order-dependent tests and prevents deterministic scenario setup.
-   - Recommendation: create repositories per app/test context, add reset/seed/scenario APIs only in the mock adapter, and use Playwright fixtures to select scenarios.
+5. **Navigation bypasses TanStack Router.** `AppShell` uses plain `<a>` elements and reads `window.location.pathname`, causing full document reloads and discarding useful in-memory query state. Use typed router links and router location state.
 
-6. **Routing is intentionally minimal.** Every unknown URL displays the dashboard, so invalid links are hidden rather than reported. Native full-page navigation also loses app state.
-   - Recommendation: adopt a security-reviewed router when more routes are added, define a real not-found page, route metadata, lazy boundaries, and authorization guards.
+6. **Optimistic concurrency is not integrated.** `If-Match` helpers and `409/412` handling exist, but current settings/payment mutations do not carry versions or present a conflict-resolution UI. The backend must enforce row versions, and every editable production resource needs an explicit stale-edit flow.
 
-7. **Static operational content can become incorrect.** The date, schedule summary, location, staff user, counts, year, and timezone assumptions are hard-coded.
-   - Recommendation: add clock, current-user, clinic, and location abstractions; calculate summaries from repository data; freeze the clock in automation.
+7. **HTTP cancellation/header composition is incomplete.** `safeJsonRequest` replaces any caller signal with its timeout signal, and spreading `Headers` is not a reliable merge. Compose abort signals and normalize with `new Headers(init.headers)` before adding defaults.
 
-8. **Dashboard async behavior is incomplete.** Loading exists, but error, empty, stale, refresh, and retry states do not.
-   - Recommendation: implement a shared async-content pattern with localized recovery controls.
+8. **Custom async telemetry transports can reject unhandled.** The synchronous `try/catch` around `void this.transport(...)` cannot catch a rejected promise. Normalize with `Promise.resolve(...).catch(...)` and add recursion/rate protection.
 
-9. **Table semantics are simulated with generic `div` roles.** Cells/column headers do not have complete table roles, and the tablet CSS hides a visual provider column without explicitly addressing its accessibility behavior.
-   - Recommendation: use a native table for desktop or complete the ARIA grid/table structure; use a separate semantic card/list presentation at tablet widths.
+### P2 — Important improvements
 
-### Lower priority / maintainability
+9. **Several visible controls are placeholders.** “Add patient” has no action, and the logout icon links to Settings. Hide unfinished actions, label them as demos, or implement them before commercial usability testing.
 
-10. **`CheckInPage` and `DashboardPage` contain dense one-line JSX.** This increases review cost and makes accessibility changes harder.
-    - Recommendation: extract feature components (`AppointmentLookupForm`, `AppointmentConfirmation`, `ScheduleTable`, `DailyStats`) after behavior stabilizes; avoid premature generic abstractions.
+10. **Central HTTP failures do not automatically produce user guidance.** The safe HTTP layer creates a trace ID for 403/5xx, but no shared mapping displays access-denied/retry copy with that reference. Real adapters need a consistent error-to-UI policy.
 
-11. **External Google Fonts were imported from CSS.** The low-power Playwright profile measured a 15-second ready time under constrained networking.
-    - Resolved in TASK-006: replaced the runtime request with system font stacks; self-host approved brand fonts later if necessary.
+11. **Infinite-scroll DOM is bounded, but prefetched page cache can still grow.** Infinite query pages cap at four, while canonical per-page prefetch entries use the QueryClient cache lifetime. Apply an explicit short `gcTime`, cap/removal policy, or cursor-window cache for long sessions.
 
-12. **No error boundary or privacy-safe telemetry implementation exists.** Requirements mention both, but the walking skeleton does not implement them.
-    - Recommendation: add route/feature error boundaries and a typed telemetry interface that explicitly rejects sensitive fields.
+12. **Mock search repeatedly scans and sorts all 10,000 records.** This is acceptable for a JSON demonstration but does not represent production performance. Backend search needs indexed fields, stable cursor ordering, maximum page size, cancellation, and measured latency budgets.
 
-13. **Zod is installed but not used.** Native form constraints cover the demo only.
-    - Recommendation: either apply Zod to DTO/fixture parsing and check-in form schemas or remove it until the first validated contract is implemented.
+13. **Toast timers are not owned or cleaned up.** Duplicate notifications schedule extra timers and timers survive provider unmount. Track one timer per toast and clear it on dismissal/unmount.
 
-## Improvements completed during this review
+14. **Critical observability paths need stronger tests.** Add tests for React fallback recovery, global listeners, 403/5xx envelopes, async transport rejection, identifier redaction, Spanish notifications, and telemetry deduplication/rate limits.
 
-- Removed an accidental production dependency named `git`.
-- Added Playwright projects for tablet landscape, tablet portrait, and desktop Chromium.
-- Added patient check-in, recovery, session-reset, navigation, overflow, and axe accessibility browser tests.
-- Added HTML/JSON reporting plus screenshots, video, traces, and axe JSON artifacts.
-- Added Playwright execution to GitHub Actions with 14-day artifact retention.
-- Added a dual modern/legacy Vite build, old-browser-safe mock cloning, CSS fallbacks, and a throttled low-power tablet performance profile.
+15. **Automated accessibility coverage is A/AA, not AAA.** The axe configuration intentionally checks WCAG 2.0/2.1 A and AA tags. AAA requires contrast verification, screen-reader/keyboard/zoom/voice/timing review, cognitive clarity checks, and physical-device sign-off.
 
-## Recommended execution order
+16. **Styles are concentrated in one large global file.** The growing stylesheet increases regression and legacy-coexistence risk. Split shell/workflow/component styles or adopt scoped CSS modules while keeping shared design tokens.
 
-1. Kiosk privacy/session controller and network recovery.
-2. Finish i18n extraction and deterministic mock scenarios.
-3. Resolve all Playwright/axe findings and create the manual AAA matrix.
-4. Add semantic tablet schedule cards and desktop table.
-5. Add API/clock/identity adapters and error boundaries.
-6. Expand check-in to demographics, intake, consent, review, and timeout recovery.
+17. **Clinical currency/time context is not fully modeled.** Money formatting defaults and mixed hardcoded clinic text should derive from loaded clinic configuration, and all times must continue using the clinic timezone rather than device timezone.
+
+## Strengths to preserve
+
+- Route-level lazy bundles and typed search/parameter validation.
+- Repository/domain boundaries that allow mock-to-HTTP replacement.
+- Maximum 96 live patient cards, 24-record pages, early prefetch, debounce, and single-flight intersection gating.
+- Minimal Web Storage allowlist and explicit backend security ownership.
+- Deterministic clinic-time formatting and CI timezone configuration.
+- Broad portrait/landscape screenshot matrix and low-power browser budget.
+- 80% coverage gates, strict lint/type checks, and Playwright failure artifacts.
+- Provider-neutral telemetry envelope and restrained accessible toast UX.
+
+## Recommended order
+
+1. Fix telemetry redaction and crash fidelity.
+2. Add resilient async/error handling and tests.
+3. Integrate real HTTP adapters plus ETag conflict UX.
+4. Complete i18n and remove misleading placeholder controls.
+5. Finish manual WCAG 2.1 AAA and physical-device certification.
+6. Bound long-session query cache, modularize styles, and establish production performance budgets.

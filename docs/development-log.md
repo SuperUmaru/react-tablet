@@ -152,3 +152,10 @@ This is an append-only record of material implementation decisions, completed wo
 - Excluded patient/user identifiers, field/DOM text, query strings, headers, tokens, bodies, clinical details, and payment details.
 - Added English/Spanish accessible, deduplicated, bounded, dismissible, motion-safe notifications for save and payment completion.
 - Verification: typecheck, lint, build, 46/46 Vitest tests, 94.31% statement/line coverage, and 82/82 Playwright tests passed.
+
+## 2026-08-03 — TASK-016 concise README and deep review
+
+- Reduced the README to a 68-line product/developer summary and moved detail behind 11 verified documentation links.
+- Reviewed all source, tests, build/CI configuration, security, concurrency, observability, accessibility, performance, and tablet boundaries.
+- Recorded one P0 privacy issue, seven P1 release blockers, nine P2 improvements, preserved strengths, and a recommended remediation order.
+- Made no application behavior changes; TypeScript and ESLint passed.
