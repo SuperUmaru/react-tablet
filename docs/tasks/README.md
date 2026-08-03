@@ -11,6 +11,9 @@ Each completed implementation task has a durable record containing purpose, tech
 | [TASK-005](TASK-005-quality-accessibility.md) | Tests, coverage, CI, security, WCAG | Automated gates complete; manual AAA audit open |
 | [TASK-006](TASK-006-playwright-tablet-observability.md) | Playwright tablet automation and reports | Complete |
 | [TASK-007](TASK-007-staff-practice-modules.md) | Overview, Schedule, Patients, Checkout, Settings | Complete walking slice |
+| [TASK-008](TASK-008-large-patient-directory.md) | Large patient directory and device matrix | Complete |
+| [TASK-009](TASK-009-react-scaffolding-baseline.md) | React primitives and tablet patient controls | Complete |
+| [TASK-010](TASK-010-ci-determinism.md) | Timezone-safe clinical times and reliable CI artifacts | Complete |
 
 ## Task/commit workflow
 

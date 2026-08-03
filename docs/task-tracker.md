@@ -23,6 +23,7 @@ Last updated: 2026-08-03
 - [x] M0.4 Add CI checks for typecheck, lint, tests, coverage, and build.
 - [x] M0.5 Initialize Git and create task-scoped local commits.
 - [x] M0.6 Connect `origin` and push `main` to `SuperUmaru/react-tablet`.
+- [x] M0.7 Make CI timezone-independent, use Node 24 GitHub Actions, and condition Playwright artifacts on execution (TASK-010).
 
 Acceptance: a clean checkout can install, test with at least 80% coverage, and build using documented commands.
 

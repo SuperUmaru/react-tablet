@@ -6,6 +6,7 @@ import { PageHeader } from '../components/PageHeader';
 import { StatusBadge } from '../components/StatusBadge';
 import { appointmentRepository } from '../data/mock/mockAppointmentRepository';
 import { displayName, initials } from '../domain/appointment';
+import { formatClinicTime } from '../domain/dateTime';
 
 export function DashboardPage() {
   const { i18n } = useTranslation();
@@ -38,7 +39,7 @@ export function DashboardPage() {
       <section className="schedule-card overview-schedule">
         <div className="section-heading"><div><span className="hero-kicker">NEXT UP</span><h2>The next three visits</h2></div><a className="text-button" href="/schedule">Full schedule<ArrowRight /></a></div>
         <div className="timeline-list">
-          {items.slice(0, 3).map((appointment, index) => <article key={appointment.id} className="timeline-item"><div className="timeline-time"><strong>{new Intl.DateTimeFormat(i18n.language, { hour: 'numeric', minute: '2-digit' }).format(new Date(appointment.startsAt))}</strong><span>{appointment.durationMinutes} min</span></div><div className="timeline-line"><i className={index === 0 ? 'active' : ''} /></div><span className="patient-avatar">{initials(appointment)}</span><div className="timeline-info"><strong>{displayName(appointment)}</strong><span>{appointment.service} · {appointment.provider}</span></div><StatusBadge status={appointment.status} /></article>)}
+          {items.slice(0, 3).map((appointment, index) => <article key={appointment.id} className="timeline-item"><div className="timeline-time"><strong>{formatClinicTime(appointment.startsAt, i18n.language)}</strong><span>{appointment.durationMinutes} min</span></div><div className="timeline-line"><i className={index === 0 ? 'active' : ''} /></div><span className="patient-avatar">{initials(appointment)}</span><div className="timeline-info"><strong>{displayName(appointment)}</strong><span>{appointment.service} · {appointment.provider}</span></div><StatusBadge status={appointment.status} /></article>)}
         </div>
       </section>
 
@@ -46,4 +47,3 @@ export function DashboardPage() {
     </div>
   </AppShell>;
 }
-

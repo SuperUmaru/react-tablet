@@ -86,6 +86,13 @@ This is an append-only record of material implementation decisions, completed wo
 
 ## Log Entry Template
 
+## 2026-08-03 — CI determinism and timezone-safe appointments
+
+- Centralized appointment formatting in the Riverside clinic's `Asia/Bangkok` timezone.
+- Corrected Schedule, Overview, and kiosk confirmation so CI and devices cannot reinterpret clinic times in their host timezone.
+- Upgraded the workflow to Node 24 GitHub Action generations and prevented artifact upload when Playwright was skipped.
+- Added regression tests for the reported 1 PM group and 1:30 PM appointment.
+
 ### YYYY-MM-DD — Short title
 
 - Work completed:

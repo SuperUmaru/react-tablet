@@ -5,6 +5,7 @@ import { Brand } from '../components/Brand';
 import { LanguageSwitcher } from '../components/LanguageSwitcher';
 import { appointmentRepository } from '../data/mock/mockAppointmentRepository';
 import type { Appointment } from '../domain/appointment';
+import { formatClinicDateTime } from '../domain/dateTime';
 
 type Step = 'lookup' | 'confirm' | 'success';
 
@@ -55,7 +56,7 @@ export function CheckInPage() {
 
         {step === 'confirm' && appointment && <section className="kiosk-card confirmation-card">
           <div className="kiosk-icon"><Calendar /></div><p className="eyebrow">{t('kiosk.found')}</p><h1>{appointment.patientFirstName}, is this your visit?</h1>
-          <div className="appointment-confirmation"><div><span>Date & time</span><strong>{new Intl.DateTimeFormat(i18n.language, { weekday: 'long', month: 'long', day: 'numeric', hour: 'numeric', minute: '2-digit' }).format(new Date(appointment.startsAt))}</strong></div><div><span>Treatment</span><strong>{appointment.service}</strong></div><div><span>Provider</span><strong>{appointment.provider}</strong></div></div>
+          <div className="appointment-confirmation"><div><span>Date & time</span><strong>{formatClinicDateTime(appointment.startsAt, i18n.language, { weekday: 'long', month: 'long', day: 'numeric', hour: 'numeric', minute: '2-digit' })}</strong></div><div><span>Treatment</span><strong>{appointment.service}</strong></div><div><span>Provider</span><strong>{appointment.provider}</strong></div></div>
           <button className="button button--kiosk" onClick={() => void confirm()} disabled={busy}>{busy ? 'Checking in…' : t('kiosk.confirm')}<ArrowRight /></button>
           <button className="button button--quiet" onClick={() => setStep('lookup')}><ArrowLeft />{t('kiosk.back')}</button>
         </section>}
