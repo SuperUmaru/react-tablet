@@ -19,7 +19,15 @@ export interface PatientPage {
   hasMore: boolean;
 }
 
-export interface PatientPageRequest { page: number; pageSize: number; search?: string; }
+export interface PatientPageRequest {
+  page: number;
+  pageSize: number;
+  search?: string;
+  membership?: 'all' | 'Radiance' | 'Essential' | 'none';
+  balance?: 'all' | 'due' | 'clear';
+  visit?: 'all' | 'booked' | 'not-booked';
+  sort?: 'default' | 'name' | 'recent-visit' | 'balance';
+}
 
 export interface CheckoutItem { id: string; name: string; quantity: number; unitPriceMinor: number; }
 export interface CheckoutVisit {

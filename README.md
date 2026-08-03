@@ -2,6 +2,8 @@
 
 Tablet-first patient check-in and responsive staff operations UI built with React and TypeScript. Desktop is supported; mobile is not an initial release target.
 
+Technology baseline: React 19, strict TypeScript, Vite, TanStack Query for server state, Radix Primitives for complex accessible controls, semantic CSS design tokens, Vitest, and Playwright. See the [React architecture baseline](docs/react-architecture.md).
+
 ## Run locally
 
 ```bash
@@ -66,7 +68,9 @@ The Patients page demonstrates large-list handling without putting 10,000 DOM ca
 }
 ```
 
-The search box debounces input for 250 ms before changing the React Query cache key. Each response contains only 24 records. Page mode provides Previous/Next controls and the current page count. In infinite mode, an `IntersectionObserver` requests the next page when the loading sentinel approaches the viewport; an explicit “Load more patients” button remains as a keyboard-accessible fallback. Search runs against name and email in the mock adapter, representing server-side filtering. The result summary announces “Showing X of Y” through an `aria-live` region.
+The search box debounces input for 250 ms before changing the React Query cache key. It searches name, email, and phone, with additional membership, balance, next-visit, and sorting controls. Each response contains only 24 records. Page mode provides Previous/Next controls and the current page count. In infinite mode, an `IntersectionObserver` requests the next page when the loading sentinel approaches the viewport; an explicit “Load more patients” button remains as a keyboard-accessible fallback. The result summary announces “Showing X of Y” through an `aria-live` region.
+
+Landscape cards use a compact tablet density: the initial iPad Air/Pro viewport is automatically tested to contain exactly four or six fully visible cards. New cards use a short staggered entry transition and pagination/mode changes scroll smoothly; both behaviors collapse to effectively no motion when `prefers-reduced-motion` is enabled.
 
 This design keeps initial rendering bounded, avoids a 10,000-node layout/paint cost on old iPads and Android WebViews, caches each search independently, and maps directly to an API such as:
 

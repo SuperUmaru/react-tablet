@@ -1,12 +1,13 @@
+import { lazy, Suspense, type ReactNode } from 'react';
 import { CheckInPage } from './pages/CheckInPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { SchedulePage } from './pages/SchedulePage';
-import { PatientsPage } from './pages/PatientsPage';
 import { CheckoutPage } from './pages/CheckoutPage';
-import { SettingsPage } from './pages/SettingsPage';
+
+const PatientsPage = lazy(() => import('./pages/PatientsPage').then((module) => ({ default:module.PatientsPage })));
+const SettingsPage = lazy(() => import('./pages/SettingsPage').then((module) => ({ default:module.SettingsPage })));
 
 export function App() {
   const routes: Record<string, ReactNode> = { '/':<DashboardPage />, '/check-in':<CheckInPage />, '/schedule':<SchedulePage />, '/patients':<PatientsPage />, '/checkout':<CheckoutPage />, '/settings':<SettingsPage /> };
-  return routes[window.location.pathname] ?? <DashboardPage />;
+  return <Suspense fallback={<div className="loading" role="status">Loading page…</div>}>{routes[window.location.pathname] ?? <DashboardPage />}</Suspense>;
 }
-import type { ReactNode } from 'react';

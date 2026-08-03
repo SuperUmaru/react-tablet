@@ -12,7 +12,7 @@ test('staff can use schedule, patients, checkout, and settings', async ({ page }
   await expect(page.getByText('Showing 24 of 10,000')).toBeVisible();
   await page.getByRole('button', { name:'Infinite scroll' }).click();
   await expect(page.getByRole('button', { name:'Load more patients' })).toBeVisible();
-  await page.getByPlaceholder('Search 10,000 patients by name or email').fill('nora@example.test');
+  await page.getByPlaceholder('Search name, email, or phone').fill('nora@example.test');
   await expect(page.getByText('Showing 1 of 1')).toBeVisible();
   await expect(page.getByText('Nora Bennett')).toBeVisible();
   await testInfo.attach('patient-avatar-layout', { body:await page.screenshot({ fullPage:true }), contentType:'image/png' });

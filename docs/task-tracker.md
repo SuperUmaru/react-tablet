@@ -30,7 +30,7 @@ Acceptance: a clean checkout can install, test with at least 80% coverage, and b
 
 - [x] M1.1 Responsive tablet-first app shell and desktop navigation walking skeleton.
 - [x] M1.2 Design tokens for type, color, spacing, radius, focus, and elevation.
-- [ ] M1.3 Accessible reusable button, field, card, badge, stepper, alert, and dialog patterns.
+- [~] M1.3 Radix-based Select wrapper and existing button/field/card/badge/stepper/alert patterns delivered; Dialog wrapper remains open.
 - [ ] M1.4 Routing and not-found/error behavior.
 - [x] M1.5 English and Spanish localization foundation with locale formatting.
 - [x] M1.6 Mock repository boundary with synthetic JSON-compatible data.

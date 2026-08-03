@@ -75,6 +75,15 @@ This is an append-only record of material implementation decisions, completed wo
 - Added iPad Air, iPad Pro, Android tablet, and large tablet Playwright profiles alongside legacy tablet, portrait tablet, and desktop.
 - Captured all six pages across seven device profiles; 42/42 visual tests passed, including patient-card containment assertions.
 
+## 2026-08-03 — React primitives and tablet patient controls
+
+- Formalized Vite/TypeScript, TanStack Query/local state boundaries, Radix primitives, and semantic design-token conventions.
+- Added an accessible Radix Select wrapper and migrated Settings and Patient filters to it.
+- Added patient search by phone, membership/balance/next-visit filters, sorting, and reset behavior.
+- Added compact landscape density and reduced-motion-aware entry/smooth-scroll behavior.
+- Lazy-loaded Patients and Settings to isolate the Select dependency and preserve the initial bundle budget.
+- Added an iPad Air/Pro assertion requiring exactly four or six fully visible cards in the initial viewport.
+
 ## Log Entry Template
 
 ### YYYY-MM-DD — Short title

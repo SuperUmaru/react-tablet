@@ -1,5 +1,11 @@
 import '@testing-library/jest-dom/vitest';
 import { cleanup } from '@testing-library/react';
-import { afterEach } from 'vitest';
+import { afterEach, vi } from 'vitest';
+
+Object.defineProperty(window, 'scrollTo', { value:vi.fn(), writable:true });
+Object.defineProperty(HTMLElement.prototype, 'hasPointerCapture', { value:vi.fn(() => false), writable:true });
+Object.defineProperty(HTMLElement.prototype, 'setPointerCapture', { value:vi.fn(), writable:true });
+Object.defineProperty(HTMLElement.prototype, 'releasePointerCapture', { value:vi.fn(), writable:true });
+Object.defineProperty(HTMLElement.prototype, 'scrollIntoView', { value:vi.fn(), writable:true });
 
 afterEach(() => cleanup());

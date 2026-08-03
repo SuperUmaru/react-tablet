@@ -23,6 +23,13 @@ for (const route of pages) {
         return Boolean(content && card.left >= content.left && card.right <= content.right && card.width > 250);
       }));
       expect(cardsFit).toBe(true);
+      if (['ipad-air-landscape','ipad-pro-landscape'].includes(testInfo.project.name)) {
+        const fullyVisibleCards = await cards.evaluateAll((elements) => elements.filter((element) => {
+          const card = element.getBoundingClientRect();
+          return card.top >= 0 && card.bottom <= window.innerHeight;
+        }).length);
+        expect([4,6]).toContain(fullyVisibleCards);
+      }
     }
     await page.screenshot({
       path: `test-results/visual-audit/${testInfo.project.name}-${route.name}.png`,

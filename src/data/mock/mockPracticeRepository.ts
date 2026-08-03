@@ -34,12 +34,19 @@ export class MockPracticeRepository implements PracticeRepository {
   private settings = clone(settingsFixture) as ClinicSettings;
 
   async listPatients() { await wait(); return clone(this.patients); }
-  async listPatientsPage({ page, pageSize, search = '' }: PatientPageRequest) {
+  async listPatientsPage({ page, pageSize, search = '', membership = 'all', balance = 'all', visit = 'all', sort = 'default' }: PatientPageRequest) {
     await wait();
     const normalized = search.trim().toLocaleLowerCase();
-    const matches = normalized
-      ? this.patients.filter((patient) => `${patient.firstName} ${patient.lastName} ${patient.email}`.toLocaleLowerCase().includes(normalized))
-      : this.patients;
+    const matches = this.patients.filter((patient) => {
+      const searchable = `${patient.firstName} ${patient.lastName} ${patient.email} ${patient.phone}`.toLocaleLowerCase();
+      const membershipMatch = membership === 'all' || (membership === 'none' ? patient.membership === null : patient.membership === membership);
+      const balanceMatch = balance === 'all' || (balance === 'due' ? patient.balanceMinor > 0 : patient.balanceMinor === 0);
+      const visitMatch = visit === 'all' || (visit === 'booked' ? patient.nextVisit !== null : patient.nextVisit === null);
+      return (!normalized || searchable.includes(normalized)) && membershipMatch && balanceMatch && visitMatch;
+    });
+    if (sort === 'name') matches.sort((a,b) => `${a.lastName}${a.firstName}`.localeCompare(`${b.lastName}${b.firstName}`));
+    if (sort === 'recent-visit') matches.sort((a,b) => b.lastVisit.localeCompare(a.lastVisit));
+    if (sort === 'balance') matches.sort((a,b) => b.balanceMinor - a.balanceMinor);
     const start = page * pageSize;
     return clone({
       items: matches.slice(start, start + pageSize),

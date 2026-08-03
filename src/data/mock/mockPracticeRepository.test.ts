@@ -15,6 +15,11 @@ describe('MockPracticeRepository', () => {
     const search = await repository.listPatientsPage({ page: 0, pageSize: 24, search: 'maya@example.test' });
     expect(search.total).toBe(1);
     expect(search.items[0]!.firstName).toBe('Maya');
+    const filtered = await repository.listPatientsPage({ page:0,pageSize:24,membership:'Radiance',balance:'due',visit:'booked',sort:'balance' });
+    expect(filtered.items.every((patient) => patient.membership === 'Radiance' && patient.balanceMinor > 0 && patient.nextVisit)).toBe(true);
+    const unbooked = await repository.listPatientsPage({ page:0,pageSize:24,membership:'none',balance:'clear',visit:'not-booked',sort:'recent-visit' });
+    expect(unbooked.items.every((patient) => !patient.membership && patient.balanceMinor === 0 && !patient.nextVisit)).toBe(true);
+    await expect(repository.listPatientsPage({ page:0,pageSize:1,sort:'name' })).resolves.toMatchObject({ items:[expect.any(Object)] });
   });
   it('pays a visit and rejects an unknown visit', async () => {
     const repository = new MockPracticeRepository();
