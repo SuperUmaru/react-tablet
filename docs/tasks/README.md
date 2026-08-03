@@ -17,6 +17,7 @@ Each completed implementation task has a durable record containing purpose, tech
 | [TASK-011](TASK-011-patient-navigation-cache-security.md) | Bounded patient browsing, workflow navigation, and request safety | Complete |
 | [TASK-012](TASK-012-tanstack-router.md) | Typed TanStack Router foundation | Complete |
 | [TASK-013](TASK-013-infinite-scroll-concurrency.md) | Stable infinite scroll and cross-device concurrency | Complete |
+| [TASK-014](TASK-014-patient-portrait-controls.md) | Patient portrait search and filter alignment | Complete |
 
 ## Task/commit workflow
 

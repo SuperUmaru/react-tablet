@@ -86,6 +86,16 @@ This is an append-only record of material implementation decisions, completed wo
 
 ## Log Entry Template
 
+## 2026-08-03 — TASK-014 started
+
+- Recorded the portrait UI correction before implementation.
+- Defined iPad Mini, Air, and Pro screenshot and control-center geometry checks.
+- Search, mode controls, result count, filter triggers, and dropdown chevrons are in scope.
+- Replaced the width-only control layout with an orientation-aware portrait grid that covers 744px Mini, 820px Air, and 1024px Pro viewports.
+- Centered search and Radix Select icons with explicit block geometry and preserved 48–52px touch heights.
+- Added three portrait Playwright projects, full-route screenshots, overflow checks, and 2px control-center assertions.
+- Visually reviewed all three Patients screenshots and verified 43/43 tests plus 82/82 Playwright tests.
+
 ## 2026-08-03 — TASK-013 started
 
 - Recorded the task before implementation.

@@ -64,6 +64,8 @@ The original iPad Air and “old Android tablet” labels are not precise enough
 
 ## Real-device test matrix
 
+Automated portrait reference profiles now include iPad Mini, iPad Air, and iPad Pro dimensions. These catch responsive breakpoint and geometry regressions, but physical Safari validation remains required for release.
+
 Automation is necessary but cannot emulate Safari/WebKit versions, memory pressure, thermal throttling, kiosk management, on-screen keyboard behavior, or peripherals accurately.
 
 For each certified device, record:

@@ -45,6 +45,21 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'], viewport: { width: 1180, height: 820 }, hasTouch: true, deviceScaleFactor: 2 }
     },
     {
+      name: 'ipad-mini-portrait',
+      testMatch: /visual-audit\.spec\.ts/,
+      use: { ...devices['Desktop Chrome'], viewport: { width: 744, height: 1133 }, hasTouch: true, deviceScaleFactor: 2 }
+    },
+    {
+      name: 'ipad-air-portrait',
+      testMatch: /visual-audit\.spec\.ts/,
+      use: { ...devices['Desktop Chrome'], viewport: { width: 820, height: 1180 }, hasTouch: true, deviceScaleFactor: 2 }
+    },
+    {
+      name: 'ipad-pro-portrait',
+      testMatch: /visual-audit\.spec\.ts/,
+      use: { ...devices['Desktop Chrome'], viewport: { width: 1024, height: 1366 }, hasTouch: true, deviceScaleFactor: 2 }
+    },
+    {
       name: 'ipad-pro-landscape',
       testMatch: /visual-audit\.spec\.ts/,
       use: { ...devices['Desktop Chrome'], viewport: { width: 1366, height: 1024 }, hasTouch: true, deviceScaleFactor: 2 }

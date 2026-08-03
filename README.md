@@ -106,6 +106,9 @@ The visual audit captures Overview, Schedule, Patients, Checkout, Settings, and 
 
 - Legacy 1024×768 tablet/iPad landscape
 - 768×1024 tablet portrait
+- iPad Mini portrait, 744×1133 at 2× scale
+- iPad Air portrait, 820×1180 at 2× scale
+- iPad Pro portrait, 1024×1366 at 2× scale
 - iPad Air landscape, 1180×820 at 2× scale
 - iPad Pro landscape, 1366×1024 at 2× scale
 - Android tablet landscape, 1280×800 at 1.5× scale
@@ -117,6 +120,8 @@ npx playwright test tests/e2e/visual-audit.spec.ts
 ```
 
 Screenshots are written to `test-results/visual-audit` with the device name in each filename. Playwright checks horizontal overflow and verifies every Patient card stays fully inside the dashboard with a usable minimum width, preventing partial “2.1 card” rows. It also checks workflow behavior, keyboard/touch-relevant controls, accessibility, and a throttled low-power tablet performance budget.
+
+For portrait Patients layouts, Playwright additionally measures the search field, input, search icon, each filter trigger, and every dropdown chevron. Their vertical centerlines must remain within 2 CSS pixels, and all controls must remain inside the viewport. The portrait layout switches by orientation rather than relying on the former 800px-only breakpoint, covering the 820px iPad Air and 1024px iPad Pro correctly.
 
 ## Data and API boundary
 

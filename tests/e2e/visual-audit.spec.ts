@@ -30,6 +30,22 @@ for (const route of pages) {
         }).length);
         expect([4,6]).toContain(fullyVisibleCards);
       }
+      if (testInfo.project.name.endsWith('-portrait')) {
+        const searchGeometry = await page.locator('.patient-search-row .search-field').evaluate((field) => {
+          const box = field.getBoundingClientRect();
+          const icon = field.querySelector('svg')?.getBoundingClientRect();
+          const input = field.querySelector('input')?.getBoundingClientRect();
+          return { boxCenter:box.top + box.height / 2,iconCenter:icon ? icon.top + icon.height / 2 : 0,inputCenter:input ? input.top + input.height / 2 : 0 };
+        });
+        expect(Math.abs(searchGeometry.boxCenter - searchGeometry.iconCenter)).toBeLessThanOrEqual(2);
+        expect(Math.abs(searchGeometry.boxCenter - searchGeometry.inputCenter)).toBeLessThanOrEqual(2);
+        const selectAlignment = await page.locator('.patient-filter-row .ui-select-trigger').evaluateAll((triggers) => triggers.every((trigger) => {
+          const box = trigger.getBoundingClientRect();
+          const icon = trigger.querySelector('svg')?.getBoundingClientRect();
+          return Boolean(icon && Math.abs((box.top + box.height / 2) - (icon.top + icon.height / 2)) <= 2 && box.left >= 0 && box.right <= window.innerWidth);
+        }));
+        expect(selectAlignment).toBe(true);
+      }
     }
     await page.screenshot({
       path: `test-results/visual-audit/${testInfo.project.name}-${route.name}.png`,

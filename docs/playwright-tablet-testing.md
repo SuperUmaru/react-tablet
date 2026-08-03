@@ -104,4 +104,6 @@ The trace provides DOM snapshots, network requests, console messages, action tim
 
 ## CI behavior
 
-GitHub Actions installs Chromium and runs all three projects after unit coverage and production build. CI retries failures twice, uses two workers, and rejects committed `test.only`. Reports are uploaded whether the job passes or fails.
+GitHub Actions installs Chromium and runs the complete device matrix after unit coverage and production build. CI retries failures twice, uses two workers, and rejects committed `test.only`. Reports are uploaded after Playwright runs, including on test failure.
+
+Portrait visual coverage includes iPad Mini (744×1133), iPad Air (820×1180), and iPad Pro (1024×1366). The Patients audit verifies page overflow, card containment, and the vertical centerlines of the search input/icon and every dropdown chevron within a 2px tolerance. Full-page screenshots are saved under `test-results/visual-audit` for every audited route and device.
