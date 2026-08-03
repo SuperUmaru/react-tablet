@@ -86,6 +86,16 @@ This is an append-only record of material implementation decisions, completed wo
 
 ## Log Entry Template
 
+## 2026-08-03 — TASK-013 started
+
+- Recorded the task before implementation.
+- Defined proactive page prefetch, debounced intersection handling, and a synchronous single-flight lock.
+- Split multi-device correctness between backend atomic version checks and frontend conflict/revalidation UX.
+- Added canonical next-page prefetch, a 600 px early threshold, and a cooldown/single-flight gate that rearms only after sentinel exit.
+- Added ETag/`If-Match` mutation helpers and explicit `409/412` conflict errors without silent retries.
+- Documented the ASP.NET row-version, SignalR invalidation, reconnect revalidation, conflict UX, audit, and two-client backend release test.
+- Verified 43/43 tests with 98.43% statement/line coverage, production build, and 64/64 Playwright device tests.
+
 ## 2026-08-03 — TASK-012 started
 
 - Recorded the routing migration before implementation.

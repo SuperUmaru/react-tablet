@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useInfiniteQuery, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
 import { CalendarPlus, ChevronLeft, ChevronRight, LoaderCircle, RotateCcw, Search, UserPlus } from 'lucide-react';
@@ -8,6 +8,7 @@ import { SelectField } from '../components/ui/SelectField';
 import { practiceRepository } from '../data/mock/mockPracticeRepository';
 import { formatMoney, type Patient, type PatientPageRequest } from '../domain/practice';
 import { readPatientLoadingMode, savePatientLoadingMode, type PatientLoadingMode } from '../config/storage';
+import { InfiniteLoadGate } from '../domain/infiniteLoadGate';
 
 const PAGE_SIZE = 24;
 const MAX_SCROLL_PAGES = 4;
@@ -30,6 +31,7 @@ export function PatientsPage() {
   const [sort, setSort] = useState<Sort>('default');
   const [page, setPage] = useState(0);
   const loadMoreRef = useRef<HTMLDivElement>(null);
+  const loadGateRef = useRef(new InfiniteLoadGate());
   const queryClient = useQueryClient();
 
   useEffect(() => {
@@ -37,17 +39,21 @@ export function PatientsPage() {
     return () => window.clearTimeout(timer);
   }, [search]);
 
-  const request = { pageSize:PAGE_SIZE, search:debouncedSearch, membership, balance, visit, sort };
-  const filterKey = [debouncedSearch,membership,balance,visit,sort] as const;
+  const request = useMemo(() => ({ pageSize:PAGE_SIZE, search:debouncedSearch, membership, balance, visit, sort }), [debouncedSearch,membership,balance,visit,sort]);
+  const filterKey = useMemo(() => [debouncedSearch,membership,balance,visit,sort] as const, [debouncedSearch,membership,balance,visit,sort]);
+  const patientPage = useCallback((targetPage:number) => ({
+    queryKey: ['patients','records',targetPage,...filterKey] as const,
+    queryFn: () => practiceRepository.listPatientsPage({ ...request,page:targetPage }),
+    staleTime:60_000,
+  }), [filterKey,request]);
   const pageQuery = useQuery({
-    queryKey: ['patients','page',page,...filterKey],
-    queryFn: () => practiceRepository.listPatientsPage({ ...request,page }),
+    ...patientPage(page),
     enabled: mode === 'pages',
   });
   const scrollQuery = useInfiniteQuery({
     queryKey: ['patients','scroll',...filterKey],
     initialPageParam: 0,
-    queryFn: ({ pageParam }) => practiceRepository.listPatientsPage({ ...request,page:pageParam }),
+    queryFn: ({ pageParam }) => queryClient.ensureQueryData(patientPage(pageParam)),
     getNextPageParam: (lastPage) => lastPage.hasMore ? lastPage.page + 1 : undefined,
     getPreviousPageParam: (firstPage) => firstPage.page > 0 ? firstPage.page - 1 : undefined,
     maxPages: MAX_SCROLL_PAGES,
@@ -65,22 +71,32 @@ export function PatientsPage() {
     const adjacentPages = [page - 1, page + 1].filter((candidate) => candidate >= 0 && candidate < totalPages);
     for (const adjacentPage of adjacentPages) {
       void queryClient.prefetchQuery({
-        queryKey: ['patients','page',adjacentPage,debouncedSearch,membership,balance,visit,sort],
-        queryFn: () => practiceRepository.listPatientsPage({ pageSize:PAGE_SIZE,search:debouncedSearch,membership,balance,visit,sort,page:adjacentPage }),
-        staleTime: 60_000,
+        ...patientPage(adjacentPage),
       });
     }
-  }, [debouncedSearch, membership, balance, visit, sort, mode, page, pageQuery.data, queryClient, totalPages]);
+  }, [debouncedSearch, membership, balance, visit, sort, mode, page, pageQuery.data, patientPage, queryClient, totalPages]);
+
+  useEffect(() => {
+    if (mode !== 'scroll') return;
+    const lastPage = scrollQuery.data?.pages.at(-1);
+    if (lastPage?.hasMore) void queryClient.prefetchQuery(patientPage(lastPage.page + 1));
+  }, [debouncedSearch, membership, balance, visit, sort, mode, patientPage, queryClient, scrollQuery.data?.pages]);
+
+  useEffect(() => { loadGateRef.current.reset(); }, [debouncedSearch,membership,balance,visit,sort,mode]);
 
   useEffect(() => {
     const node = loadMoreRef.current;
     if (mode !== 'scroll' || !node || !hasNextPage || typeof IntersectionObserver === 'undefined') return;
     const observer = new IntersectionObserver(([entry]) => {
-      if (entry?.isIntersecting && !isFetchingNextPage) void fetchNextPage();
-    }, { rootMargin:'280px 0px' });
+      if (!entry?.isIntersecting) { loadGateRef.current.leave(); return; }
+      const nextPage = scrollQuery.data?.pages.at(-1)?.page;
+      const key = `${filterKey.join('|')}:${nextPage ?? 0}`;
+      if (isFetchingNextPage || !loadGateRef.current.enter(key)) return;
+      void fetchNextPage().finally(() => loadGateRef.current.finish(key));
+    }, { rootMargin:'600px 0px' });
     observer.observe(node);
     return () => observer.disconnect();
-  }, [fetchNextPage,hasNextPage,isFetchingNextPage,mode]);
+  }, [fetchNextPage,filterKey,hasNextPage,isFetchingNextPage,mode,scrollQuery.data?.pages]);
 
   const resetFilters = () => { setSearch(''); setMembership('all'); setBalance('all'); setVisit('all'); setSort('default'); setPage(0); };
   const changeMode = (value:PatientLoadingMode) => { setMode(value); savePatientLoadingMode(value); setPage(0); window.scrollTo({ top:0,behavior:'smooth' }); };

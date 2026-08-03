@@ -43,3 +43,7 @@ The CSP should use nonces/hashes and remove `'unsafe-inline'` after styles are e
 ## Patient navigation
 
 Directory and detail links use a synthetic `patientId`. The Schedule page resolves that ID through the repository and does not put the patient's name in the URL. An ID is still untrusted input: the backend must verify that the current user and tenant may access it before returning any record.
+
+## Concurrent writes
+
+Patient mutations must include the server ETag through `If-Match`. The frontend treats `409/412` as `ConcurrentEditError`, preserves the local draft, and does not automatically retry. The backend must perform the atomic version comparison; see [multi-device concurrency](multi-device-concurrency.md).

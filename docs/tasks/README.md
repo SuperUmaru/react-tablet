@@ -16,6 +16,7 @@ Each completed implementation task has a durable record containing purpose, tech
 | [TASK-010](TASK-010-ci-determinism.md) | Timezone-safe clinical times and reliable CI artifacts | Complete |
 | [TASK-011](TASK-011-patient-navigation-cache-security.md) | Bounded patient browsing, workflow navigation, and request safety | Complete |
 | [TASK-012](TASK-012-tanstack-router.md) | Typed TanStack Router foundation | Complete |
+| [TASK-013](TASK-013-infinite-scroll-concurrency.md) | Stable infinite scroll and cross-device concurrency | Complete |
 
 ## Task/commit workflow
 

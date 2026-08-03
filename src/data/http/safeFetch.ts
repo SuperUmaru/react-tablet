@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { ConcurrentEditError } from '../../domain/concurrency';
 
 const DEFAULT_TIMEOUT_MS = 15_000;
 
@@ -26,6 +27,10 @@ export async function safeJsonRequest<T>(
       redirect: 'error',
       signal: controller.signal,
     });
+    if (response.status === 409 || response.status === 412) {
+      const latest = response.headers.get('content-type')?.includes('application/json') ? await response.json() : null;
+      throw new ConcurrentEditError(response.status, latest);
+    }
     if (!response.ok) throw new Error(`Request failed (${response.status})`);
     const contentType = response.headers.get('content-type') ?? '';
     if (!contentType.includes('application/json')) throw new Error('Unexpected response type');

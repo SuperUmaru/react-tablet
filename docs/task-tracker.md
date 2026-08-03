@@ -57,6 +57,7 @@ Acceptance: a patient can complete the full synthetic-data flow using touch or k
 ## M3 — Staff Tablet and Desktop Operations
 
 - [x] M3.0 Bound patient infinite-scroll DOM, prefetch adjacent pages, add patient detail/quick schedule, and enforce frontend storage/request safety (TASK-011).
+- [x] M3.0a Debounce/single-flight infinite loading and define version-safe multi-device mutations (TASK-013).
 
 - [x] M3.1 Today’s schedule and status summary walking skeleton.
 - [~] M3.2 Provider filter implemented; status filter remains open.
