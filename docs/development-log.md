@@ -86,6 +86,24 @@ This is an append-only record of material implementation decisions, completed wo
 
 ## Log Entry Template
 
+## 2026-08-03 — TASK-012 started
+
+- Recorded the routing migration before implementation.
+- Selected TanStack Router to complement the existing TanStack Query server-state layer.
+- Defined typed search parameters, lazy route bundles, router-native links, and explicit not-found handling as acceptance requirements.
+- Added the recommended Vite file-route generator, committed route tree, typed dynamic patient route, validated Schedule search, intent preloading, scroll restoration, and deterministic memory-router tests.
+- The first browser run exposed a missing nested Patients outlet; corrected it with a layout plus index route and reran successfully.
+- Verified 38/38 tests with 97.46% statement/line coverage and 64/64 Playwright device tests.
+
+## 2026-08-03 — TASK-011 started
+
+- Created the task record before continuing implementation work.
+- Fixed the patient directory target at 24 records per page and at most 96 live cards in infinite-scroll mode.
+- Defined patient-data cache isolation, non-sensitive preference storage, patient/detail/schedule transitions, and frontend versus backend security ownership.
+- Added a maximum 96-card infinite-scroll window, adjacent page prefetch, patient detail/quick schedule, URL-safe patient-ID transfer, and guarded JSON request utility.
+- Documented Web Storage keys, HTTPS response-header contract, and backend-only security duties; no secret was added to the frontend.
+- Verified 39/39 unit/integration tests with 98.70% statement/line coverage, production build, and 64/64 Playwright multi-device tests.
+
 ## 2026-08-03 — CI determinism and timezone-safe appointments
 
 - Centralized appointment formatting in the Riverside clinic's `Asia/Bangkok` timezone.

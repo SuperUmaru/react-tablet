@@ -1,16 +1,21 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { CalendarPlus, ChevronDown, Search } from 'lucide-react';
 import { AppShell } from '../components/AppShell';
 import { PageHeader } from '../components/PageHeader';
 import { StatusBadge } from '../components/StatusBadge';
 import { appointmentRepository } from '../data/mock/mockAppointmentRepository';
+import { practiceRepository } from '../data/mock/mockPracticeRepository';
 import { displayName, initials } from '../domain/appointment';
 import { formatClinicHour, formatClinicTime } from '../domain/dateTime';
 
-export function SchedulePage() {
+export function SchedulePage({ patientId = '' }: { patientId?:string }) {
   const query = useQuery({ queryKey: ['appointments', 'today'], queryFn: () => appointmentRepository.listToday() });
+  const patientQuery = useQuery({ queryKey:['patient',patientId],queryFn:() => practiceRepository.getPatient(patientId),enabled:Boolean(patientId) });
   const [search, setSearch] = useState('');
+  useEffect(() => {
+    if (patientQuery.data) setSearch(`${patientQuery.data.firstName} ${patientQuery.data.lastName}`);
+  }, [patientQuery.data]);
   const [provider, setProvider] = useState('all');
   const filtered = useMemo(() => (query.data ?? []).filter((item) => (provider === 'all' || item.provider === provider) && `${displayName(item)} ${item.service}`.toLowerCase().includes(search.toLowerCase())), [query.data, provider, search]);
   const groups = useMemo(() => Object.entries(filtered.reduce<Record<string, typeof filtered>>((result, appointment) => {

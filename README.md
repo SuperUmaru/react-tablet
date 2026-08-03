@@ -2,7 +2,7 @@
 
 Tablet-first patient check-in and responsive staff operations UI built with React and TypeScript. Desktop is supported; mobile is not an initial release target.
 
-Technology baseline: React 19, strict TypeScript, Vite, TanStack Query for server state, Radix Primitives for complex accessible controls, semantic CSS design tokens, Vitest, and Playwright. See the [React architecture baseline](docs/react-architecture.md).
+Technology baseline: React 19, strict TypeScript, Vite, TanStack Router for typed file-based routing, TanStack Query for server state, Radix Primitives for complex accessible controls, semantic CSS design tokens, Vitest, and Playwright. See the [React architecture baseline](docs/react-architecture.md).
 
 ## Run locally
 
@@ -16,6 +16,7 @@ Working routes:
 - `/` — clinic-flow Overview
 - `/schedule` — appointment board and filtering
 - `/patients` — patient directory and search
+- `/patients/pat-201` — typed patient detail route and quick scheduling
 - `/checkout` — itemized visit payment simulation
 - `/settings` — clinic/kiosk preferences
 - `/check-in` — patient tablet check-in
@@ -42,11 +43,12 @@ Playwright runs tablet landscape, tablet portrait, a throttled low-power tablet 
 
 ## Design and implementation
 
-The application is a tablet-first React 19 + TypeScript interface built with Vite. At widths up to 1100 px the staff shell becomes a compact 82 px navigation rail, preserving the content area on older 768–1024 px tablets. Desktop uses the expanded navigation. Touch controls target at least 44 px, layouts avoid horizontal overflow, reduced-motion preferences are respected, and automated axe checks support the WCAG 2.1 AAA goal. Manual accessibility review is still required before claiming conformance.
+The application is a tablet-first React 19 + TypeScript interface built with Vite. TanStack Router's recommended file-based Vite integration generates typed routes, automatically splits route bundles, preloads links on intent, restores scroll, validates URL search data, and renders an explicit 404. At widths up to 1100 px the staff shell becomes a compact 82 px navigation rail, preserving the content area on older 768–1024 px tablets. Desktop uses the expanded navigation. Touch controls target at least 44 px, layouts avoid horizontal overflow, reduced-motion preferences are respected, and automated axe checks support the WCAG 2.1 AAA goal. Manual accessibility review is still required before claiming conformance.
 
 The code is organized around replaceable boundaries:
 
 - `pages` compose workflow-specific UI and React Query state.
+- `routes` define typed URL boundaries and connect route parameters to pages.
 - `components` contain reusable shell, navigation, status, and branding elements.
 - `domain` defines framework-independent TypeScript contracts.
 - `data/mock` implements those contracts with deterministic JSON-style sample responses.
@@ -68,7 +70,11 @@ The Patients page demonstrates large-list handling without putting 10,000 DOM ca
 }
 ```
 
-The search box debounces input for 250 ms before changing the React Query cache key. It searches name, email, and phone, with additional membership, balance, next-visit, and sorting controls. Each response contains only 24 records. Page mode provides Previous/Next controls and the current page count. In infinite mode, an `IntersectionObserver` requests the next page when the loading sentinel approaches the viewport; an explicit “Load more patients” button remains as a keyboard-accessible fallback. The result summary announces “Showing X of Y” through an `aria-live` region.
+The search box debounces input for 250 ms before changing the React Query cache key. It searches name, email, and phone, with additional membership, balance, next-visit, and sorting controls. Each response contains only 24 records. Page mode provides Previous/Next controls, prefetches the adjacent pages, and shows the current page count. In infinite mode, an `IntersectionObserver` requests the next page when the loading sentinel approaches the viewport; an explicit “Load more patients” button remains as a keyboard-accessible fallback. TanStack Query retains no more than four infinite pages, so the live document contains at most 96 patient cards instead of growing toward 10,000. The result summary announces “Showing X of Y” through an `aria-live` region.
+
+Patient cache keys contain the normalized search, membership, balance, next-visit, sort, mode, and page dimensions. A filter change therefore cannot reuse another filter's visible result. Patient API data stays in the in-memory Query cache. Only the non-sensitive Pages/Infinite-scroll preference is stored in `localStorage`, using the versioned key `aurelia.ui.patient-loading-mode.v1`; patient details, tokens, and clinical context are never written to Web Storage.
+
+Each patient card links to a focused detail view and directly to Schedule with the patient search prefilled. The URL carries only a patient ID, never a patient name; Schedule resolves the display data through the repository. This transition works after refresh and avoids a duplicate global patient store. The backend must still authorize the ID for the signed-in user and tenant.
 
 Landscape cards use a compact tablet density: the initial iPad Air/Pro viewport is automatically tested to contain exactly four or six fully visible cards. New cards use a short staggered entry transition and pagination/mode changes scroll smoothly; both behaviors collapse to effectively no motion when `prefers-reduced-motion` is enabled.
 
@@ -113,3 +119,7 @@ Screenshots are written to `test-results/visual-audit` with the device name in e
 ## Data and API boundary
 
 All current data is synthetic and contains no patient health information. `AppointmentRepository` and `PracticeRepository` are mock adapters with asynchronous JSON-compatible results. Replace them with ASP.NET Core adapters after OpenAPI contracts are confirmed; UI components should never import fixture JSON directly.
+
+`safeJsonRequest` is the frontend HTTP boundary for that future adapter. It permits only the application origin plus an optional `VITE_API_ORIGIN`, blocks HTTPS downgrade requests, applies a timeout, rejects redirects and unexpected content types, and validates JSON with Zod. A `VITE_*` value is public bundle configuration, never a secret. See the [frontend security and HTTPS deployment contract](docs/frontend-security.md).
+
+Authentication, authorization, tenant/patient ownership, CSRF protection, secure cookies, CORS, rate limiting, audit logs, secret management, and HSTS/CSP response headers belong to ASP.NET Core and the HTTPS host. They cannot be secured by React middleware. Do not put API keys, access tokens, encryption keys, or patient data in Vite variables, source code, `localStorage`, or `sessionStorage`.

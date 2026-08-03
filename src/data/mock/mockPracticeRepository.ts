@@ -34,6 +34,7 @@ export class MockPracticeRepository implements PracticeRepository {
   private settings = clone(settingsFixture) as ClinicSettings;
 
   async listPatients() { await wait(); return clone(this.patients); }
+  async getPatient(id: string) { await wait(); return clone(this.patients.find((patient) => patient.id === id) ?? null); }
   async listPatientsPage({ page, pageSize, search = '', membership = 'all', balance = 'all', visit = 'all', sort = 'default' }: PatientPageRequest) {
     await wait();
     const normalized = search.trim().toLocaleLowerCase();

@@ -15,6 +15,11 @@ test('staff can use schedule, patients, checkout, and settings', async ({ page }
   await page.getByPlaceholder('Search name, email, or phone').fill('nora@example.test');
   await expect(page.getByText('Showing 1 of 1')).toBeVisible();
   await expect(page.getByText('Nora Bennett')).toBeVisible();
+  await page.getByRole('link', { name:'View patient' }).click();
+  await expect(page.getByRole('heading', { name:'Nora Bennett' })).toBeVisible();
+  await page.getByRole('link', { name:'Quick schedule' }).click();
+  await expect(page.getByPlaceholder('Search patient or service')).toHaveValue('Nora Bennett');
+  await page.getByRole('link', { name:'Patients' }).click();
   await testInfo.attach('patient-avatar-layout', { body:await page.screenshot({ fullPage:true }), contentType:'image/png' });
 
   await page.getByRole('link', { name:'Checkout' }).click();

@@ -3,9 +3,9 @@ import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
 import { renderApp } from '../test/render';
 import { SchedulePage } from './SchedulePage';
-import { PatientsPage } from './PatientsPage';
 import { CheckoutPage } from './CheckoutPage';
 import { SettingsPage } from './SettingsPage';
+import { App } from '../App';
 
 describe('staff pages', () => {
   it('filters schedule by patient', async () => {
@@ -18,7 +18,7 @@ describe('staff pages', () => {
     expect(screen.getByText('Sofia Martinez')).toBeInTheDocument();
   });
   it('searches patients', async () => {
-    renderApp(<PatientsPage />, '/patients');
+    renderApp(<App initialPath="/patients" />);
     expect(await screen.findByText('Maya Thompson')).toBeInTheDocument();
     expect(screen.getByText('Showing 24 of 10,000')).toBeInTheDocument();
     expect(screen.getByRole('button', { name:'Previous' })).toBeDisabled();
@@ -38,6 +38,16 @@ describe('staff pages', () => {
     expect(await screen.findByText('Showing 1 of 1')).toBeInTheDocument();
     expect(await screen.findByText('Nora Bennett')).toBeInTheDocument();
     expect(screen.queryByText('Maya Thompson')).not.toBeInTheDocument();
+  });
+  it('bounds infinite scroll and remembers only the browsing preference', async () => {
+    renderApp(<App initialPath="/patients" />);
+    await screen.findByText('Maya Thompson');
+    await userEvent.click(screen.getByRole('button', { name:'Infinite scroll' }));
+    for (let index = 0; index < 4; index += 1) {
+      await userEvent.click(await screen.findByRole('button', { name:'Load more patients' }));
+    }
+    expect(document.querySelectorAll('.patient-profile-card')).toHaveLength(96);
+    expect(window.localStorage).toHaveLength(1);
   });
   it('completes a mock checkout', async () => {
     renderApp(<CheckoutPage />, '/checkout');

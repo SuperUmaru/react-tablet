@@ -8,4 +8,9 @@ Object.defineProperty(HTMLElement.prototype, 'setPointerCapture', { value:vi.fn(
 Object.defineProperty(HTMLElement.prototype, 'releasePointerCapture', { value:vi.fn(), writable:true });
 Object.defineProperty(HTMLElement.prototype, 'scrollIntoView', { value:vi.fn(), writable:true });
 
-afterEach(() => cleanup());
+afterEach(() => {
+  cleanup();
+  window.localStorage.clear();
+  vi.restoreAllMocks();
+  vi.unstubAllGlobals();
+});

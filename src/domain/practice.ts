@@ -55,6 +55,7 @@ export interface ClinicSettings {
 export interface PracticeRepository {
   listPatients(): Promise<Patient[]>;
   listPatientsPage(request: PatientPageRequest): Promise<PatientPage>;
+  getPatient(id: string): Promise<Patient | null>;
   listCheckoutVisits(): Promise<CheckoutVisit[]>;
   payVisit(id: string): Promise<CheckoutVisit>;
   getSettings(): Promise<ClinicSettings>;

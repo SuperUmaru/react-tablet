@@ -14,6 +14,8 @@ Each completed implementation task has a durable record containing purpose, tech
 | [TASK-008](TASK-008-large-patient-directory.md) | Large patient directory and device matrix | Complete |
 | [TASK-009](TASK-009-react-scaffolding-baseline.md) | React primitives and tablet patient controls | Complete |
 | [TASK-010](TASK-010-ci-determinism.md) | Timezone-safe clinical times and reliable CI artifacts | Complete |
+| [TASK-011](TASK-011-patient-navigation-cache-security.md) | Bounded patient browsing, workflow navigation, and request safety | Complete |
+| [TASK-012](TASK-012-tanstack-router.md) | Typed TanStack Router foundation | Complete |
 
 ## Task/commit workflow
 

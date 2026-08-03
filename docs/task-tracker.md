@@ -32,7 +32,8 @@ Acceptance: a clean checkout can install, test with at least 80% coverage, and b
 - [x] M1.1 Responsive tablet-first app shell and desktop navigation walking skeleton.
 - [x] M1.2 Design tokens for type, color, spacing, radius, focus, and elevation.
 - [~] M1.3 Radix-based Select wrapper and existing button/field/card/badge/stepper/alert patterns delivered; Dialog wrapper remains open.
-- [ ] M1.4 Routing and not-found/error behavior.
+- [x] M1.4 Routing and not-found behavior.
+- [x] M1.4a Replace the temporary pathname map with typed TanStack Router routes and validated search parameters (TASK-012).
 - [x] M1.5 English and Spanish localization foundation with locale formatting.
 - [x] M1.6 Mock repository boundary with synthetic JSON-compatible data.
 - [x] M1.7 Privacy-safe kiosk session reset behavior for the current walking skeleton.
@@ -54,6 +55,8 @@ Acceptance: the reference UI works at 768×1024, 1024×768, 1280×800, and 1440�
 Acceptance: a patient can complete the full synthetic-data flow using touch or keyboard, and patient context is cleared at the end.
 
 ## M3 — Staff Tablet and Desktop Operations
+
+- [x] M3.0 Bound patient infinite-scroll DOM, prefetch adjacent pages, add patient detail/quick schedule, and enforce frontend storage/request safety (TASK-011).
 
 - [x] M3.1 Today’s schedule and status summary walking skeleton.
 - [~] M3.2 Provider filter implemented; status filter remains open.
