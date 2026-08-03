@@ -49,6 +49,32 @@ This is an append-only record of material implementation decisions, completed wo
 - Verified 28/28 unit/integration tests and coverage of 100% statements/lines, 95.42% branches, and 88.52% functions.
 - Verified modern/legacy production build and 22/22 Playwright tests across tablet, desktop, accessibility, and low-power projects.
 
+## 2026-08-03 — Schedule and typography correction
+
+- Replaced the misleading proportional schedule rail with timestamp-derived agenda groups. The 1:30 PM visit is now structurally and visually grouped under 1 PM.
+- Replaced the inconsistent native provider dropdown arrow with a controlled accessible select and custom chevron.
+- Corrected patient avatar flex sizing, raised large avatars to 54 px, and added deterministic synthetic color treatments.
+- Increased supporting typography across Overview, Schedule, Patients, Checkout, Settings, and kiosk surfaces from the prior 9–12 px range to a generally readable 12–16 px scale.
+- Fixed clinic metadata leaking into the compact tablet sidebar and added Playwright screenshot attachments for schedule and patient-avatar review.
+
+## 2026-08-03 — Navigation, avatar, and visual audit correction
+
+- Replaced the generic Patients group glyph with a single-patient profile icon.
+- Centered every compact tablet navigation icon and positioned the Checkout unread-count badge as an overlay so it cannot displace the icon.
+- Fixed the patient fallback-avatar selector that clipped initials instead of centering them.
+- Replaced native Settings select arrows with one consistent high-contrast chevron.
+- Added a reusable Playwright visual-audit suite that captures every page in tablet landscape, tablet portrait, and desktop modes and checks horizontal overflow.
+- Verified 18/18 full-page visual-audit cases and 3/3 focused Patients captures.
+
+## 2026-08-03 — Large patient directory and device matrix
+
+- Added a deterministic 10,000-patient JSON-style dataset with typed 24-record page responses and server-style name/email search.
+- Added user-selectable pagination and infinite-scroll modes; pagination is the old-device-friendly default.
+- Debounced search by 250 ms and kept rendering bounded to the fetched page(s).
+- Prevented partial patient cards with zero-minimum grid tracks, card width containment, and a two-column iPad Air/Pro landscape breakpoint.
+- Added iPad Air, iPad Pro, Android tablet, and large tablet Playwright profiles alongside legacy tablet, portrait tablet, and desktop.
+- Captured all six pages across seven device profiles; 42/42 visual tests passed, including patient-card containment assertions.
+
 ## Log Entry Template
 
 ### YYYY-MM-DD — Short title

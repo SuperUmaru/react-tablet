@@ -11,6 +11,8 @@ describe('staff pages', () => {
   it('filters schedule by patient', async () => {
     renderApp(<SchedulePage />, '/schedule');
     expect(await screen.findByText('Maya Thompson')).toBeInTheDocument();
+    const onePmGroup = screen.getByText('1 PM').closest('.schedule-hour');
+    expect(onePmGroup).toHaveTextContent('1:30 PM');
     await userEvent.type(screen.getByPlaceholderText('Search patient or service'), 'Sofia');
     expect(screen.queryByText('Maya Thompson')).not.toBeInTheDocument();
     expect(screen.getByText('Sofia Martinez')).toBeInTheDocument();
@@ -18,8 +20,13 @@ describe('staff pages', () => {
   it('searches patients', async () => {
     renderApp(<PatientsPage />, '/patients');
     expect(await screen.findByText('Maya Thompson')).toBeInTheDocument();
-    await userEvent.type(screen.getByPlaceholderText('Search name or email'), 'Nora');
-    expect(screen.getByText('Nora Bennett')).toBeInTheDocument();
+    expect(screen.getByText('Showing 24 of 10,000')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name:'Previous' })).toBeDisabled();
+    await userEvent.click(screen.getByRole('button', { name:'Infinite scroll' }));
+    expect(await screen.findByRole('button', { name:'Load more patients' })).toBeInTheDocument();
+    await userEvent.type(screen.getByPlaceholderText('Search 10,000 patients by name or email'), 'nora@example.test');
+    expect(await screen.findByText('Showing 1 of 1')).toBeInTheDocument();
+    expect(await screen.findByText('Nora Bennett')).toBeInTheDocument();
     expect(screen.queryByText('Maya Thompson')).not.toBeInTheDocument();
   });
   it('completes a mock checkout', async () => {

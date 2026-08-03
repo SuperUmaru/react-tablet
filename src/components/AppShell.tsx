@@ -1,12 +1,12 @@
 import type { ReactNode } from 'react';
-import { CalendarDays, CreditCard, LayoutDashboard, LogOut, Settings, Users } from 'lucide-react';
+import { CalendarDays, CreditCard, LayoutDashboard, LogOut, Settings, UserRound } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Brand } from './Brand';
 
 const items = [
   { path: '/', key: 'overview', icon: LayoutDashboard },
   { path: '/schedule', key: 'schedule', icon: CalendarDays },
-  { path: '/patients', key: 'patients', icon: Users },
+  { path: '/patients', key: 'patients', icon: UserRound },
   { path: '/checkout', key: 'checkout', icon: CreditCard },
   { path: '/settings', key: 'settings', icon: Settings }
 ] as const;
@@ -27,4 +27,3 @@ export function AppShell({ children }: { children: ReactNode }) {
     <main className="dashboard" id="main-content" tabIndex={-1}>{children}</main>
   </div>;
 }
-

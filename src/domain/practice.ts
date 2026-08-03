@@ -11,6 +11,16 @@ export interface Patient {
   tags: string[];
 }
 
+export interface PatientPage {
+  items: Patient[];
+  page: number;
+  pageSize: number;
+  total: number;
+  hasMore: boolean;
+}
+
+export interface PatientPageRequest { page: number; pageSize: number; search?: string; }
+
 export interface CheckoutItem { id: string; name: string; quantity: number; unitPriceMinor: number; }
 export interface CheckoutVisit {
   id: string;
@@ -36,6 +46,7 @@ export interface ClinicSettings {
 
 export interface PracticeRepository {
   listPatients(): Promise<Patient[]>;
+  listPatientsPage(request: PatientPageRequest): Promise<PatientPage>;
   listCheckoutVisits(): Promise<CheckoutVisit[]>;
   payVisit(id: string): Promise<CheckoutVisit>;
   getSettings(): Promise<ClinicSettings>;
@@ -47,4 +58,3 @@ export const formatMoney = (minor: number, currency = 'USD', locale = 'en-US') =
 
 export const visitTotal = (visit: CheckoutVisit) =>
   visit.items.reduce((sum, item) => sum + item.quantity * item.unitPriceMinor, 0) - visit.discountMinor + visit.taxMinor;
-

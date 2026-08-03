@@ -78,9 +78,9 @@ Acceptance: the synthetic visit can move from ready-for-checkout to completed, i
 
 - [x] M5.1 Unit tests for current domain rules and adapter paths.
 - [x] M5.2 Component/integration tests for current critical UI states.
-- [x] M5.3 Current coverage exceeds 80%: 100% statements/lines/functions and 96.25% branches.
+- [x] M5.3 Current coverage exceeds 80%: 98.87% statements/lines, 94.85% branches, and 83.56% functions.
 - [ ] M5.4 Complete and document WCAG 2.1 AAA audit: keyboard, focus, 7:1 text contrast, zoom, screen reader, voice control, timing, cognitive clarity, and applicable media criteria.
-- [ ] M5.5 Tablet portrait/landscape and desktop visual verification.
+- [x] M5.5 Automated tablet portrait/landscape and desktop visual verification across seven device profiles (TASK-008); physical-device sign-off remains under M5.9.
 - [ ] M5.6 Privacy review for fixtures, logs, URLs, caches, and session cleanup.
 - [~] M5.7 Production build passes; release runbook remains open.
 - [x] M5.8 Playwright tablet/desktop journeys, axe scans, low-power budget, and failure artifact reporting (TASK-006).

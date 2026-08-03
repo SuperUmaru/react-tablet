@@ -40,6 +40,26 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'], viewport: { width: 768, height: 1024 }, hasTouch: true }
     },
     {
+      name: 'ipad-air-landscape',
+      testMatch: /visual-audit\.spec\.ts/,
+      use: { ...devices['Desktop Chrome'], viewport: { width: 1180, height: 820 }, hasTouch: true, deviceScaleFactor: 2 }
+    },
+    {
+      name: 'ipad-pro-landscape',
+      testMatch: /visual-audit\.spec\.ts/,
+      use: { ...devices['Desktop Chrome'], viewport: { width: 1366, height: 1024 }, hasTouch: true, deviceScaleFactor: 2 }
+    },
+    {
+      name: 'android-tablet-landscape',
+      testMatch: /visual-audit\.spec\.ts/,
+      use: { ...devices['Desktop Chrome'], viewport: { width: 1280, height: 800 }, hasTouch: true, deviceScaleFactor: 1.5 }
+    },
+    {
+      name: 'large-tablet-landscape',
+      testMatch: /visual-audit\.spec\.ts/,
+      use: { ...devices['Desktop Chrome'], viewport: { width: 1440, height: 960 }, hasTouch: true, deviceScaleFactor: 1.5 }
+    },
+    {
       name: 'desktop-chromium',
       testIgnore: /performance\.spec\.ts/,
       use: { ...devices['Desktop Chrome'], viewport: { width: 1440, height: 900 } }

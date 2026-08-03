@@ -1,14 +1,21 @@
 import { expect, test } from '@playwright/test';
 
-test('staff can use schedule, patients, checkout, and settings', async ({ page }) => {
+test('staff can use schedule, patients, checkout, and settings', async ({ page }, testInfo) => {
   await page.goto('/schedule');
+  await expect(page.getByText('Maya Thompson')).toBeVisible();
+  await testInfo.attach('schedule-layout', { body:await page.screenshot({ fullPage:true }), contentType:'image/png' });
   await page.getByPlaceholder('Search patient or service').fill('Sofia');
   await expect(page.getByText('Sofia Martinez')).toBeVisible();
   await expect(page.getByText('Maya Thompson')).toBeHidden();
 
   await page.getByRole('link', { name:'Patients' }).click();
-  await page.getByPlaceholder('Search name or email').fill('Nora');
+  await expect(page.getByText('Showing 24 of 10,000')).toBeVisible();
+  await page.getByRole('button', { name:'Infinite scroll' }).click();
+  await expect(page.getByRole('button', { name:'Load more patients' })).toBeVisible();
+  await page.getByPlaceholder('Search 10,000 patients by name or email').fill('nora@example.test');
+  await expect(page.getByText('Showing 1 of 1')).toBeVisible();
   await expect(page.getByText('Nora Bennett')).toBeVisible();
+  await testInfo.attach('patient-avatar-layout', { body:await page.screenshot({ fullPage:true }), contentType:'image/png' });
 
   await page.getByRole('link', { name:'Checkout' }).click();
   await page.getByRole('button', { name:/Pay \$444.00/ }).click();
