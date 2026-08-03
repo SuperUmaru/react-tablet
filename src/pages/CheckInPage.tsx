@@ -20,17 +20,22 @@ export function CheckInPage() {
 
   async function lookup(event: FormEvent) {
     event.preventDefault(); setError(''); setBusy(true);
-    const match = await appointmentRepository.findForCheckIn(phone, dob);
-    setBusy(false);
-    if (!match) { setError(t('kiosk.notFound')); return; }
-    setAppointment(match); setStep('confirm');
+    try {
+      const match = await appointmentRepository.findForCheckIn(phone, dob);
+      if (!match) { setError(t('kiosk.notFound')); return; }
+      setAppointment(match); setStep('confirm');
+    } catch { setError(t('toast.actionFailed')); }
+    finally { setBusy(false); }
   }
 
   async function confirm() {
     if (!appointment) return;
-    setBusy(true);
-    const updated = await appointmentRepository.markArrived(appointment.id);
-    setAppointment(updated); setBusy(false); setStep('success');
+    setError(''); setBusy(true);
+    try {
+      const updated = await appointmentRepository.markArrived(appointment.id);
+      setAppointment(updated); setStep('success');
+    } catch { setError(t('toast.actionFailed')); }
+    finally { setBusy(false); }
   }
 
   function reset() { setPhone(''); setDob(''); setAppointment(null); setError(''); setStep('lookup'); }
@@ -57,6 +62,7 @@ export function CheckInPage() {
         {step === 'confirm' && appointment && <section className="kiosk-card confirmation-card">
           <div className="kiosk-icon"><Calendar /></div><p className="eyebrow">{t('kiosk.found')}</p><h1>{appointment.patientFirstName}, is this your visit?</h1>
           <div className="appointment-confirmation"><div><span>Date & time</span><strong>{formatClinicDateTime(appointment.startsAt, i18n.language, { weekday: 'long', month: 'long', day: 'numeric', hour: 'numeric', minute: '2-digit' })}</strong></div><div><span>Treatment</span><strong>{appointment.service}</strong></div><div><span>Provider</span><strong>{appointment.provider}</strong></div></div>
+          {error && <div className="form-error" role="alert">{error}</div>}
           <button className="button button--kiosk" onClick={() => void confirm()} disabled={busy}>{busy ? 'Checking in…' : t('kiosk.confirm')}<ArrowRight /></button>
           <button className="button button--quiet" onClick={() => setStep('lookup')}><ArrowLeft />{t('kiosk.back')}</button>
         </section>}

@@ -11,7 +11,7 @@ describe('CheckInPage', () => {
   it('shows a recoverable no-match error', async () => {
     const user = userEvent.setup();
     renderApp(<CheckInPage />);
-    await user.type(screen.getByLabelText(/last 4 digits/i), '9999');
+    await user.type(await screen.findByLabelText(/last 4 digits/i), '9999');
     fireEvent.change(screen.getByLabelText(/date of birth/i), { target: { value: '2000-01-01' } });
     await user.click(screen.getByRole('button', { name: /find my appointment/i }));
     expect(await screen.findByRole('alert')).toHaveTextContent("couldn’t find");
@@ -20,7 +20,7 @@ describe('CheckInPage', () => {
   it('completes check-in and clears the patient session', async () => {
     const user = userEvent.setup();
     renderApp(<CheckInPage />);
-    await user.type(screen.getByLabelText(/last 4 digits/i), '0184');
+    await user.type(await screen.findByLabelText(/last 4 digits/i), '0184');
     fireEvent.change(screen.getByLabelText(/date of birth/i), { target: { value: '1988-04-12' } });
     await user.click(screen.getByRole('button', { name: /find my appointment/i }));
     expect(await screen.findByText(/is this your visit/i)).toBeInTheDocument();
@@ -34,11 +34,10 @@ describe('CheckInPage', () => {
   it('can reject a matched identity and return to lookup', async () => {
     const user = userEvent.setup();
     renderApp(<CheckInPage />);
-    await user.type(screen.getByLabelText(/last 4 digits/i), '0184');
+    await user.type(await screen.findByLabelText(/last 4 digits/i), '0184');
     fireEvent.change(screen.getByLabelText(/date of birth/i), { target: { value: '1988-04-12' } });
     await user.click(screen.getByRole('button', { name: /find my appointment/i }));
     await user.click(await screen.findByRole('button', { name: /that’s not me/i }));
     expect(screen.getByRole('heading', { name: 'Welcome to Aurelia' })).toBeInTheDocument();
   });
 });
-

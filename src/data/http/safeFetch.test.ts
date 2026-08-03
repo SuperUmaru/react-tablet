@@ -14,6 +14,18 @@ describe('safeJsonRequest', () => {
     await expect(safeJsonRequest('/api/patients/1', schema)).resolves.toEqual({ id:'patient-1' });
   });
 
+  it('preserves Headers input and composes caller cancellation', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(new Response(JSON.stringify({ id:'patient-1' }), { status:200,headers:{ 'content-type':'application/json' } }));
+    vi.stubGlobal('fetch', fetchMock);
+    const caller = new AbortController();
+    await safeJsonRequest('/api/patients/1', schema, { headers:new Headers({ Authorization:'Bearer test' }), signal:caller.signal });
+    const options = fetchMock.mock.calls[0]![1] as RequestInit;
+    expect(new Headers(options.headers).get('Authorization')).toBe('Bearer test');
+    expect(new Headers(options.headers).get('Accept')).toBe('application/json');
+    caller.abort();
+    expect(options.signal?.aborted).toBe(true);
+  });
+
   it('blocks unapproved API origins before making a request', async () => {
     const fetchMock = vi.fn();
     vi.stubGlobal('fetch', fetchMock);

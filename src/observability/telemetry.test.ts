@@ -5,6 +5,8 @@ describe('critical telemetry', () => {
   it('templates identifiers and never includes query strings', () => {
     expect(routeTemplate('/patients/12345')).toBe('/patients/:id');
     expect(routeTemplate('/patients/550e8400-e29b-41d4-a716-446655440000')).toBe('/patients/:id');
+    expect(routeTemplate('/patients/patient-00025')).toBe('/patients/:id');
+    expect(routeTemplate('/patients/private-custom-id')).toBe('/patients/:id');
   });
 
   it('sends only bounded allowlisted breadcrumbs and no error message', () => {
@@ -17,5 +19,11 @@ describe('critical telemetry', () => {
     expect(event.breadcrumbs).toHaveLength(20);
     expect(JSON.stringify(event)).not.toContain('Jane secret');
     expect(event.errorType).toBe('Error');
+  });
+
+  it('swallows rejected async transports', async () => {
+    const client = new TelemetryClient(() => Promise.reject(new Error('offline')));
+    expect(() => client.capture('unhandled_error', new Error('boom'))).not.toThrow();
+    await Promise.resolve();
   });
 });

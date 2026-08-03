@@ -10,15 +10,14 @@ describe('shared components', () => {
   it('renders branding and translated status', async () => {
     await i18n.changeLanguage('en');
     renderApp(<><Brand compact /><StatusBadge status="arrived" /></>);
-    expect(screen.getByLabelText('Aurelia')).toBeInTheDocument();
+    expect(await screen.findByLabelText('Aurelia')).toBeInTheDocument();
     expect(screen.getByText('Arrived')).toBeInTheDocument();
   });
 
   it('switches language', async () => {
     await i18n.changeLanguage('en');
     renderApp(<LanguageSwitcher light />);
-    fireEvent.change(screen.getByLabelText('Language'), { target: { value: 'es' } });
+    fireEvent.change(await screen.findByLabelText('Language'), { target: { value: 'es' } });
     expect(await screen.findByLabelText('Idioma')).toHaveValue('es');
   });
 });
-

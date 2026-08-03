@@ -21,13 +21,16 @@ export async function safeJsonRequest<T>(
 
   const controller = new AbortController();
   const timeout = window.setTimeout(() => controller.abort(), DEFAULT_TIMEOUT_MS);
+  const signal = init.signal ? AbortSignal.any([init.signal, controller.signal]) : controller.signal;
+  const headers = new Headers(init.headers);
+  if (!headers.has('Accept')) headers.set('Accept', 'application/json');
   try {
     const response = await fetch(url, {
       ...init,
       credentials: 'same-origin',
-      headers: { Accept: 'application/json', ...init.headers },
+      headers,
       redirect: 'error',
-      signal: controller.signal,
+      signal,
     });
     if (response.status === 409 || response.status === 412) {
       const latest = response.headers.get('content-type')?.includes('application/json') ? await response.json() : null;
