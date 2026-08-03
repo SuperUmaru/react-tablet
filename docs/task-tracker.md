@@ -21,8 +21,8 @@ Last updated: 2026-08-03
 - [x] M0.2 Scaffold Vite, React, and strict TypeScript.
 - [x] M0.3 Configure ESLint, Vitest, and coverage thresholds (formatting automation remains a later refinement).
 - [x] M0.4 Add CI checks for typecheck, lint, tests, coverage, and build.
-- [ ] M0.5 Initialize Git and create the first local commit.
-- [!] M0.6 Create/connect GitHub repository and push (GitHub CLI is not installed; remote/auth required).
+- [x] M0.5 Initialize Git and create task-scoped local commits.
+- [x] M0.6 Connect `origin` and push `main` to `SuperUmaru/react-tablet`.
 
 Acceptance: a clean checkout can install, test with at least 80% coverage, and build using documented commands.
 
@@ -101,7 +101,7 @@ Acceptance: one React slice operates safely beside the legacy UI and can be roll
 
 | ID | Item | Owner/input needed | Status |
 | --- | --- | --- | --- |
-| D-01 | GitHub organization/user, repository name, and visibility | Project owner | Open |
+| D-01 | GitHub organization/user, repository name, and visibility | Project owner | Resolved: `SuperUmaru/react-tablet` |
 | D-02 | Existing legacy frontend source/location | Project owner | Open |
 | D-03 | Target clinic tablet hardware/browser | Clinic operations | Open |
 | D-04 | Confirm Spanish as the first EU locale or select another | Product | Assumed Spanish for scaffold |

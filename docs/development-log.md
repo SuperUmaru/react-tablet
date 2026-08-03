@@ -24,6 +24,12 @@ This is an append-only record of material implementation decisions, completed wo
 - Raised the accessibility requirement to WCAG 2.1 Level AAA. Strengthened contrast tokens, skip navigation, document language updates, live loading state, focus behavior, and busy-state semantics. A manual criterion-by-criterion conformance report remains required before claiming conformance.
 - Production audit identified overlapping React Router advisories with no clean 7.x resolution. Removed the router dependency; the current two-route walking skeleton uses native navigation and can adopt a patched router when route complexity warrants it.
 
+## 2026-08-03 — GitHub publishing
+
+- Initialized the repository on `main` and created task-referenced commits for governance, the React application, and quality controls.
+- Connected `origin` to `https://github.com/SuperUmaru/react-tablet.git` and pushed `main` successfully.
+- Local commit identity is `Codex <codex@local>` because no repository author identity was configured; future commits should use the project owner’s verified GitHub email if contribution attribution is required.
+
 ## Log Entry Template
 
 ### YYYY-MM-DD — Short title
