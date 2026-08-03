@@ -55,19 +55,19 @@ Acceptance: a patient can complete the full synthetic-data flow using touch or k
 ## M3 — Staff Tablet and Desktop Operations
 
 - [x] M3.1 Today’s schedule and status summary walking skeleton.
-- [ ] M3.2 Provider and status filters.
-- [ ] M3.3 Patient/appointment search.
+- [~] M3.2 Provider filter implemented; status filter remains open.
+- [x] M3.3 Patient and appointment search walking slice.
 - [ ] M3.4 Staff-assisted check-in.
 - [ ] M3.5 Visit status transitions.
-- [~] M3.6 Responsive tablet and desktop table layout complete; dedicated tablet card variant remains under usability review.
+- [x] M3.6 Responsive appointment cards and patient/staff tablet/desktop layouts.
 
 Acceptance: front-desk staff can identify arrivals and incomplete forms efficiently on tablet and desktop.
 
 ## M4 — Checkout
 
-- [ ] M4.1 Service/product cart.
-- [ ] M4.2 Decimal-safe subtotal, tax, discount, and balance calculations.
-- [ ] M4.3 Mock payment success, decline, and retry.
+- [~] M4.1 Itemized service/product checkout summary implemented; editable cart remains open.
+- [x] M4.2 Integer-minor-unit subtotal, tax, discount, and balance calculations.
+- [~] M4.3 Mock payment success implemented; decline and retry remain open.
 - [ ] M4.4 Receipt preview and simulated delivery.
 - [ ] M4.5 Visit completion and follow-up action.
 - [ ] M4.6 Permissions and confirmation for sensitive actions.

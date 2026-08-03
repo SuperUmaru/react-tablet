@@ -1,0 +1,7 @@
+[
+  { "id":"pat-201", "firstName":"Maya", "lastName":"Thompson", "email":"maya@example.test", "phone":"••• ••• 0184", "lastVisit":"2026-05-14", "nextVisit":"2026-08-03", "membership":"Radiance", "balanceMinor":0, "tags":["VIP","Skincare"] },
+  { "id":"pat-202", "firstName":"Sofia", "lastName":"Martinez", "email":"sofia@example.test", "phone":"••• ••• 7721", "lastVisit":"2026-06-22", "nextVisit":"2026-08-03", "membership":null, "balanceMinor":12500, "tags":["New patient"] },
+  { "id":"pat-203", "firstName":"Emma", "lastName":"Wilson", "email":"emma@example.test", "phone":"••• ••• 4509", "lastVisit":"2026-02-19", "nextVisit":"2026-08-03", "membership":"Essential", "balanceMinor":0, "tags":["Laser"] },
+  { "id":"pat-204", "firstName":"Ava", "lastName":"Chen", "email":"ava@example.test", "phone":"••• ••• 2290", "lastVisit":"2026-07-12", "nextVisit":"2026-08-03", "membership":"Radiance", "balanceMinor":42500, "tags":["Injectables"] },
+  { "id":"pat-205", "firstName":"Nora", "lastName":"Bennett", "email":"nora@example.test", "phone":"••• ••• 6138", "lastVisit":"2026-04-08", "nextVisit":null, "membership":null, "balanceMinor":0, "tags":["Inactive"] }
+]

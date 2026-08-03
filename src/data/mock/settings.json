@@ -1,0 +1,11 @@
+{
+  "clinicName":"Aurelia Med Spa",
+  "locationName":"Riverside Clinic",
+  "timezone":"Asia/Bangkok",
+  "currency":"USD",
+  "language":"en",
+  "kioskTimeoutMinutes":5,
+  "requireConsent":true,
+  "allowTips":true,
+  "appointmentReminders":true
+}

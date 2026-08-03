@@ -40,6 +40,15 @@ This is an append-only record of material implementation decisions, completed wo
 - The initial low-power measurement exposed an invalid dev-server performance method and a runtime font dependency. Removed Google Fonts and changed Playwright to measure production bundles. The unchanged throttled performance gate then passed.
 - Removed an accidental `git` npm production dependency; dependency audit remains clean.
 
+## 2026-08-03 — Staff practice modules
+
+- Replaced placeholder staff navigation with working Overview, Schedule, Patients, Checkout, and Settings routes.
+- Redesigned Overview as a Med Spa clinic-flow command center instead of generic statistic cards.
+- Added typed synthetic patient, checkout, and settings JSON behind `PracticeRepository`.
+- Added working schedule/provider search, patient search, simulated payment completion, and settings persistence.
+- Verified 28/28 unit/integration tests and coverage of 100% statements/lines, 95.42% branches, and 88.52% functions.
+- Verified modern/legacy production build and 22/22 Playwright tests across tablet, desktop, accessibility, and low-power projects.
+
 ## Log Entry Template
 
 ### YYYY-MM-DD — Short title

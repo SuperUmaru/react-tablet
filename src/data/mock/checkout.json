@@ -1,0 +1,4 @@
+[
+  { "id":"visit-501", "patientName":"Ava Chen", "provider":"Nina Patel, RN", "items":[{"id":"svc-1","name":"Injectable follow-up","quantity":1,"unitPriceMinor":35000},{"id":"prod-1","name":"Recovery serum","quantity":1,"unitPriceMinor":8500}],"discountMinor":2500,"taxMinor":3400,"status":"ready" },
+  { "id":"visit-502", "patientName":"Sofia Martinez", "provider":"Nina Patel, RN", "items":[{"id":"svc-2","name":"Skin consultation","quantity":1,"unitPriceMinor":12500}],"discountMinor":0,"taxMinor":1000,"status":"ready" }
+]

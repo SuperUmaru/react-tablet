@@ -10,6 +10,7 @@ Each completed implementation task has a durable record containing purpose, tech
 | [TASK-004](TASK-004-staff-dashboard.md) | Tablet/desktop staff dashboard | Walking skeleton complete |
 | [TASK-005](TASK-005-quality-accessibility.md) | Tests, coverage, CI, security, WCAG | Automated gates complete; manual AAA audit open |
 | [TASK-006](TASK-006-playwright-tablet-observability.md) | Playwright tablet automation and reports | Complete |
+| [TASK-007](TASK-007-staff-practice-modules.md) | Overview, Schedule, Patients, Checkout, Settings | Complete walking slice |
 
 ## Task/commit workflow
 

@@ -8,7 +8,7 @@ test.describe('staff operations', () => {
   });
 
   test('renders the daily schedule without horizontal page overflow', async ({ page }, testInfo) => {
-    await expect(page.getByRole('heading', { name: 'Good morning, Olivia' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'The clinic, at a glance' })).toBeVisible();
     await expect(page.getByText('HydraFacial Signature')).toBeVisible();
     const hasOverflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth);
     expect(hasOverflow).toBe(false);

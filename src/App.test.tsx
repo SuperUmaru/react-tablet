@@ -11,6 +11,13 @@ describe('App routing', () => {
 
   it('uses the dashboard as the safe fallback for unknown routes', async () => {
     renderApp(<App />, '/missing');
-    expect(await screen.findByText(/Good morning, Olivia/i)).toBeInTheDocument();
+    expect(await screen.findByText(/The clinic, at a glance/i)).toBeInTheDocument();
+  });
+
+  it.each([
+    ['/schedule', 'Schedule'], ['/patients', 'Patients'], ['/checkout', 'Checkout'], ['/settings', 'Settings']
+  ])('renders %s route', async (route, heading) => {
+    renderApp(<App />, route);
+    expect(await screen.findByRole('heading', { name: heading })).toBeInTheDocument();
   });
 });

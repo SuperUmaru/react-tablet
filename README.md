@@ -9,7 +9,14 @@ npm install
 npm run dev
 ```
 
-The staff dashboard is at `/`; patient check-in is at `/check-in`.
+Working routes:
+
+- `/` — clinic-flow Overview
+- `/schedule` — appointment board and filtering
+- `/patients` — patient directory and search
+- `/checkout` — itemized visit payment simulation
+- `/settings` — clinic/kiosk preferences
+- `/check-in` — patient tablet check-in
 
 Demo check-in credentials:
 
